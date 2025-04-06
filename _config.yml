@@ -1,0 +1,5 @@
+exclude:
+  - node_modules
+  - yolov7-zz
+  - api-proxy
+  

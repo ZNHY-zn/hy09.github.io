@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 智农慧眼</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/modules.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        /* 关于我们页面特定样式 */
+        .page-header {
+            background: url('../images/s011.png') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            padding: 12rem 0 8rem !important;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 1;
+        }
+        
+        .about-section {
+            padding: 5rem 0;
+        }
+        .about-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        .about-image {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+        .mission-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            height: 100%;
+            transition: var(--transition);
+        }
+        .mission-card:hover {
+            transform: translateY(-10px);
+        }
+        .mission-icon {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(26, 135, 84, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .mission-icon i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        .mission-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        .team-section {
+            padding: 5rem 0;
+            background-color: #f9f9f9;
+        }
+        .team-member {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+        .team-image {
+            position: relative;
+            overflow: hidden;
+        }
+        .team-image img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .team-member:hover .team-image img {
+            transform: scale(1.05);
+        }
+        .team-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .team-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            color: var(--primary-color);
+        }
+        .team-info p {
+            color: var(--gray-color);
+            margin-bottom: 1rem;
+        }
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        .team-social a {
+            width: 35px;
+            height: 35px;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-color);
+            transition: var(--transition);
+        }
+        .team-social a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .history-section {
+            padding: 5rem 0;
+        }
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #f8f9fa;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -12.5px;
+            background-color: white;
+            border: 4px solid var(--primary-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .timeline-left {
+            left: 0;
+        }
+        .timeline-right {
+            left: 50%;
+        }
+        .timeline-right::after {
+            left: -12.5px;
+        }
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        .timeline-year {
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+        .timeline-content h3 {
+            color: var(--primary-color);
+            margin: 1rem 0 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        @keyframes glowText {
+            0% { text-shadow: 0 0 10px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5); }
+            100% { text-shadow: 0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 40px rgba(26, 135, 84, 0.3); }
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(25deg) translateX(-150%); }
+            100% { transform: rotate(25deg) translateX(150%); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+            opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes zoomEffect {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .btn-shine {
+            animation: shine 1.8s infinite;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <!-- 导航内容将由JavaScript动态生成 -->
+    </nav>
+
+    <!-- 页面横幅 - 合并封面 -->
+    <header class="page-header" style="margin-bottom: 0; position: relative; overflow: hidden; height: auto; padding-top: 30px; padding-bottom: 20px;">
+        <!-- 动态背景 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('../images/s011.png'); background-size: cover; background-position: center; filter: brightness(0.85) contrast(1.2); animation: zoomEffect 20s infinite alternate;">
+        </div>
+        <!-- 半透明叠加层 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6), rgba(0,0,0,0.3)); animation: fadeIn 1.5s ease-in-out;"></div>
+        
+        <div class="container" style="position: relative; z-index: 2; padding: 30px 0 15px 0;">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 style="font-size: 2.5rem; font-weight: 800; color: white; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(0,0,0,0.7), 0 0 30px rgba(0,0,0,0.5); animation: fadeInUp 1.2s ease-out, glowText 3s infinite alternate;">
+                        关于我们
+                    </h1>
+                    <div style="width: 100px; height: 3px; background: linear-gradient(to right, #1a8754, #146c43); margin: 0 auto 1rem; animation: scaleIn 1.5s ease-out, pulse 3s infinite alternate;"></div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="content-card" style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); border-radius: 15px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); animation: fadeIn 1.8s ease-in-out; transform-style: preserve-3d; transition: all 0.3s ease;">
+                        <h2 class="text-white text-center mb-2" style="font-size: 1.5rem; font-weight: 600; text-shadow: 0 0 15px rgba(0,0,0,0.8); animation: slideInLeft 1.5s ease-out;">
+                            智慧农业领域的创新引领者
+                        </h2>
+                        
+                        <p class="lead text-center mb-3" style="font-size: 0.95rem; line-height: 1.4; color: rgba(255,255,255,0.95); text-shadow: 0 0 10px rgba(0,0,0,0.8); animation: slideInRight 1.5s ease-out;">
+                            智农慧眼团队致力于将人工智能、物联网和大数据技术融入现代农业生产，打造一体化的智慧农业解决方案，助力乡村振兴战略和农业现代化建设。
+                        </p>
+                        
+                        <div class="row justify-content-center mb-2 text-center">
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 0.8s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#1a8754';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-lightbulb" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">创新研发</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#1a8754';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-people" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">专业团队</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1.2s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#1a8754';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-gear" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">科技支撑</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1.4s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#1a8754';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-graph-up-arrow" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">产业增效</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="success-story" style="animation: fadeIn 2s ease-in-out; background: rgba(26, 135, 84, 0.25); border-left: 4px solid #1a8754; padding: 0.5rem; text-align: left; border-radius: 0 10px 10px 0; font-size: 0.85rem; margin-top: 5px; box-shadow: 0 3px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;" onmouseover="this.style.transform='translateX(5px)'; this.style.background='rgba(26, 135, 84, 0.35)';" onmouseout="this.style.transform='translateX(0)'; this.style.background='rgba(26, 135, 84, 0.25)';">
+                            <i class="bi bi-check-circle-fill" style="color: #1a8754; margin-right: 5px; text-shadow: 0 0 5px rgba(0,0,0,0.3);"></i>
+                            <span style="color: white; text-shadow: 0 0 8px rgba(0,0,0,0.6);">成立5年来，智农慧眼已服务全国28个省市，覆盖农田面积超过300万亩，帮助农户增收15%以上。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 添加查看更多按钮 -->
+            <div class="row">
+                <div class="col-12 text-center mt-3">
+                    <a href="#about-mission" class="btn btn-primary px-4 py-2 scroll-btn" style="border-radius: 50px; font-weight: 600; box-shadow: 0 4px 15px rgba(26, 135, 84, 0.5); border: none; position: relative; overflow: hidden; transition: all 0.3s ease; background: linear-gradient(to right, #1a8754, #146c43);" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(26, 135, 84, 0.7)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(26, 135, 84, 0.5)';">
+                        <span style="position: relative; z-index: 2;">
+                            <i class="bi bi-chevron-double-down me-1"></i>了解更多
+                        </span>
+                        <span class="btn-shine" style="position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; background: linear-gradient(45deg, #1a8754, #146c43); opacity: 0.7; transform: rotate(25deg) translateX(-150%); transition: all 0.6s ease;"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 关于我们 -->
+    <section class="about-section">
+        <div class="container">
+            <!-- 删除"我们的故事"部分内容 -->
+        </div>
+    </section>
+
+    <!-- 响应中央一号文件 -->
+    <section class="policy-section bg-light" id="about-mission">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>响应国家政策</h2>
+                <p>落实2025中央一号文件精神</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="policy-content text-center mb-4">
+                        <h3 class="mb-4" style="color: var(--primary-color);">响应农业农村优先发展战略</h3>
+                        <p>智农慧眼响应<strong>2025中央一号文件</strong>核心精神，坚决贯彻落实：</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="policy-content" style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <ul class="policy-list" style="list-style: none; padding-left: 0; display: flex; flex-wrap: wrap; justify-content: center;">
+                            <li style="width: 50%; margin-bottom: 15px; padding: 0 15px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-check-circle-fill text-primary me-2" style="font-size: 1.1rem; margin-top: 3px;"></i>
+                                <span>坚持<strong>稳中求进</strong>工作总基调，助力农业农村优先发展</span>
+                            </li>
+                            <li style="width: 50%; margin-bottom: 15px; padding: 0 15px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-check-circle-fill text-primary me-2" style="font-size: 1.1rem; margin-top: 3px;"></i>
+                                <span>以科技创新为动力，推动城乡<strong>融合发展</strong></span>
+                            </li>
+                            <li style="width: 50%; margin-bottom: 15px; padding: 0 15px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-check-circle-fill text-primary me-2" style="font-size: 1.1rem; margin-top: 3px;"></i>
+                                <span>锚定推进<strong>乡村全面振兴</strong>、建设农业强国目标</span>
+                            </li>
+                            <li style="width: 50%; margin-bottom: 15px; padding: 0 15px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-check-circle-fill text-primary me-2" style="font-size: 1.1rem; margin-top: 3px;"></i>
+                                <span>深入学习运用"千万工程"经验，<strong>确保国家粮食安全</strong></span>
+                            </li>
+                            <li style="width: 50%; margin-bottom: 15px; padding: 0 15px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-check-circle-fill text-primary me-2" style="font-size: 1.1rem; margin-top: 3px;"></i>
+                                <span>提升<strong>乡村产业发展水平</strong>、乡村建设水平、乡村治理水平</span>
+                            </li>
+                            <li style="width: 50%; margin-bottom: 15px; padding: 0 15px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-check-circle-fill text-primary me-2" style="font-size: 1.1rem; margin-top: 3px;"></i>
+                                <span>千方百计推动<strong>农业增效益、农村增活力、农民增收入</strong></span>
+                            </li>
+                        </ul>
+                        <div class="text-center mt-3">
+                            <p>我们致力于通过科技创新为中国式现代化建设提供坚实的基础支撑，推动农业农村现代化建设。</p>
+                            <div class="policy-image mt-4" style="max-width: 600px; margin: 0 auto; position: relative; overflow: hidden; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                               
+                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 20px; color: white;">
+                                    <h4 style="font-size: 1.2rem; margin-bottom: 5px;">为推进农业农村现代化贡献力量</h4>
+                                    <p style="font-size: 0.9rem; margin: 0;">科技赋能乡村振兴，助力农业强国建设</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 使命与价值观 -->
+    <section class="mission-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>使命与价值观</h2>
+                <p>我们的信念和追求</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="mission-card">
+                        <div class="mission-icon">
+                            <i class="bi bi-lightbulb"></i>
+                        </div>
+                        <h3>使命</h3>
+                        <p>通过人工智能和数字技术赋能农业，提高农业生产效率和资源利用率，助力农民增收，促进乡村振兴和农业现代化。</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="mission-card">
+                        <div class="mission-icon">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <h3>愿景</h3>
+                        <p>成为中国领先的智慧农业解决方案提供商，让每一位农业从业者都能享受到科技带来的便利，让农业真正实现智能化、数字化。</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="mission-card">
+                        <div class="mission-icon">
+                            <i class="bi bi-heart"></i>
+                        </div>
+                        <h3>价值观</h3>
+                        <p>以用户为中心，以创新为动力，以务实为根本，坚持"科技向农、服务三农"的核心理念，将最前沿的技术应用到农业生产实践中。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 系统功能与创新点 -->
+    <section class="features-section bg-light">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>系统功能与创新点</h2>
+                <p>以科技创新驱动农业现代化</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="feature-block mb-4" style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)';">
+                        <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; display: flex; align-items: center;">
+                            <i class="bi bi-camera-fill me-3" style="font-size: 1.8rem; color: var(--primary-color); background: rgba(26, 135, 84, 0.1); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px;"></i>
+                            智能农情监测系统
+                        </h3>
+                        <p style="margin-bottom: 10px;">集成多源遥感数据与地面观测，实现作物生长状况实时监测。</p>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>深度学习算法实现98.3%准确率的病虫害识别</span>
+                            </li>
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>多传感器融合技术构建作物健康指数评价体系</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>边缘计算技术实现本地化数据处理，降低网络依赖</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="feature-block mb-4" style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)';">
+                        <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; display: flex; align-items: center;">
+                            <i class="bi bi-graph-up me-3" style="font-size: 1.8rem; color: var(--primary-color); background: rgba(26, 135, 84, 0.1); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px;"></i>
+                            精准种植决策平台
+                        </h3>
+                        <p style="margin-bottom: 10px;">基于土壤、气象、作物特性数据，提供科学化种植方案。</p>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>自主研发的LSTM+随机森林混合算法预测作物需水量</span>
+                            </li>
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>可变率施肥技术减少化肥使用30%，提高利用率</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>智能品种选择系统评估作物适应性，平均增产15.7%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="feature-block mb-4" style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)';">
+                        <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; display: flex; align-items: center;">
+                            <i class="bi bi-qr-code me-3" style="font-size: 1.8rem; color: var(--primary-color); background: rgba(26, 135, 84, 0.1); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px;"></i>
+                            区块链质量溯源系统
+                        </h3>
+                        <p style="margin-bottom: 10px;">基于Hyperledger Fabric构建的农产品全链条质量追溯平台。</p>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>不可篡改的生产记录链保障数据真实性和完整性</span>
+                            </li>
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>一物一码技术实现单品级溯源，平均产品溢价28%</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>智能合约自动执行质量评价和交易结算流程</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="feature-block mb-4" style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)';">
+                        <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; display: flex; align-items: center;">
+                            <i class="bi bi-robot me-3" style="font-size: 1.8rem; color: var(--primary-color); background: rgba(26, 135, 84, 0.1); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px;"></i>
+                            农业AI管家
+                        </h3>
+                        <p style="margin-bottom: 10px;">基于DeepSeek-V3大模型定制的农业知识服务系统。</p>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>基于20TB农业专业语料训练的专业问答能力</span>
+                            </li>
+                            <li style="margin-bottom: 8px; display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>图像识别功能支持200+种作物病虫害精准诊断</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start;">
+                                <i class="bi bi-star-fill me-2" style="color: var(--primary-color); font-size: 0.8rem; margin-top: 5px;"></i>
+                                <span>个性化知识推送系统，精准满足不同农户需求</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section class="contact-section bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2>加入我们，共同创造智慧农业的未来</h2>
+                    <p>无论您是合作伙伴、客户还是求职者，都欢迎与我们联系</p>
+                </div>
+                <div class="col-lg-6">
+                    <form class="contact-form">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" placeholder="您的姓名" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="tel" class="form-control" placeholder="联系电话" required>
+                            </div>
+                            <div class="col-12">
+                                <input type="email" class="form-control" placeholder="电子邮箱" required>
+                            </div>
+                            <div class="col-12">
+                                <select class="form-select">
+                                    <option selected>您的咨询目的</option>
+                                    <option>业务合作</option>
+                                    <option>产品咨询</option>
+                                    <option>加入我们</option>
+                                    <option>媒体采访</option>
+                                    <option>其他问题</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <textarea class="form-control" rows="3" placeholder="请详细描述您的需求或问题"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-light">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="footer-info">
+                        
+                        <p>智农慧眼致力于通过AI技术重构传统农业生产流程，帮助农户提高产量、降低成本，推动农业现代化发展。</p>
+                        <div class="social-links">
+                            <a href="#"><i class="bi bi-wechat"></i></a>
+                            <a href="#"><i class="bi bi-tencent-qq"></i></a>
+                            <a href="#"><i class="bi bi-sina-weibo"></i></a>
+                            <a href="#"><i class="bi bi-envelope-fill"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">首页</a></li>
+                        <li><a href="monitoring.html">农情监测</a></li>
+                        <li><a href="decision.html">种植决策</a></li>
+                        <li><a href="tracing.html">质量追溯</a></li>
+                        <li><a href="knowledge.html">知识服务</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h4>支持中心</h4>
+                    <ul class="footer-links">
+                        <li><a href="help.html">帮助中心</a></li>
+                        <li><a href="faq.html">常见问题</a></li>
+                        <li><a href="download.html">APP下载</a></li>
+                        <li><a href="training.html">培训教程</a></li>
+                        <li><a href="feedback.html">问题反馈</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h4>联系我们</h4>
+                    <div class="contact-info">
+                        <p><i class="bi bi-geo-alt-fill"></i> 辽宁省大连市沙河口区大连海洋大学</p>
+                        <p><i class="bi bi-telephone-fill"></i> 13033229487</p>
+                        <p><i class="bi bi-envelope-fill"></i> 13470118418@163.com</p>
+                        <p><i class="bi bi-clock-fill"></i> 工作时间: 周一至周五 9:00-18:00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 智农慧眼 - AI驱动下的精准种植与智能农业管理平台 | 辽ICP备20254321号</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <a href="#" class="back-to-top">
+        <i class="bi bi-arrow-up"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html> 

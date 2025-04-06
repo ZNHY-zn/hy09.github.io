@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能农情监测系统 - 智农慧眼</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/monitoring.css">
+    <link rel="stylesheet" href="../css/modules.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        /* AI演示部分新样式 */
+        .ai-demo-section {
+            margin-top: 50px;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+     
+        /* 添加页面横幅背景样式 */
+        .page-header {
+            background: url('../images/1.jpg') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            padding: 12rem 0 8rem !important; /* 增加上下padding使背景更高 */
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 1;
+        }
+     
+        .demo-card {
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+     
+        .demo-card:hover {
+            transform: translateY(-5px);
+        }
+     
+        .demo-icon i {
+            font-size: 48px;
+            transition: all 0.3s ease;
+        }
+     
+        .demo-card:hover .demo-icon i {
+            transform: scale(1.1);
+        }
+     
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #6c757d;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+     
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+     
+        .upload-area {
+            border: 2px dashed #ced4da;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+     
+        .upload-area:hover {
+            border-color: #28a745;
+            background-color: #e9f7ef;
+        }
+     
+        .info-card {
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+     
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        /* 添加动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes zoomEffect {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        .feature-item {
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-8px);
+        }
+
+        .feature-item i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover i {
+            transform: scale(1.2);
+        }
+
+        .feature-item span {
+            display: block;
+            font-weight: 500;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes glowText {
+            0% { text-shadow: 0 0 10px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5); }
+            100% { text-shadow: 0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 40px rgba(76, 175, 80, 0.3); }
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(25deg) translateX(-150%); }
+            100% { transform: rotate(25deg) translateX(150%); }
+        }
+
+        .scroll-btn:hover #btn-shine {
+            animation: shine 1.5s infinite;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <!-- 导航内容将由JavaScript动态生成 -->
+    </nav>
+
+    <!-- 页面横幅 - 合并封面 -->
+    <header class="page-header" style="margin-bottom: 0; position: relative; overflow: hidden; height: auto; padding-top: 30px; padding-bottom: 20px;">
+        <!-- 动态背景 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('../images/n001.png'); background-size: cover; background-position: center; filter: brightness(0.85) contrast(1.2); animation: zoomEffect 20s infinite alternate;">
+        </div>
+        <!-- 半透明叠加层 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6), rgba(0,0,0,0.3)); animation: fadeIn 1.5s ease-in-out;"></div>
+        
+        <div class="container" style="position: relative; z-index: 2; padding: 30px 0 15px 0;">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 style="font-size: 2.5rem; font-weight: 800; color: white; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(0,0,0,0.7), 0 0 30px rgba(0,0,0,0.5); animation: fadeInUp 1.2s ease-out, glowText 3s infinite alternate;">
+                        智能农情监测
+                    </h1>
+                    <div style="width: 100px; height: 3px; background: linear-gradient(to right, #4caf50, #8bc34a); margin: 0 auto 1rem; animation: scaleIn 1.5s ease-out, pulse 3s infinite alternate;"></div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="content-card" style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); border-radius: 15px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); animation: fadeIn 1.8s ease-in-out; transform-style: preserve-3d; transition: all 0.3s ease;">
+                        <h2 class="text-white text-center mb-2" style="font-size: 1.5rem; font-weight: 600; text-shadow: 0 0 15px rgba(0,0,0,0.8); animation: slideInLeft 1.5s ease-out;">
+                            多源数据融合与智能监测体系
+                        </h2>
+                        
+                        <p class="lead text-center mb-3" style="font-size: 0.95rem; line-height: 1.4; color: rgba(255,255,255,0.95); text-shadow: 0 0 10px rgba(0,0,0,0.8); animation: slideInRight 1.5s ease-out;">
+                            融合卫星遥感、物联网感知和深度学习技术，构建立体化农情感知网络。日均处理传感器数据超500万条，无人机影像覆盖3000平方公里，实现全方位精准监测。
+                        </p>
+                        
+                        <div class="row justify-content-center mb-2 text-center">
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 0.8s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#4caf50';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-moisture" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">田间墒情传感器</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#4caf50';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-cloud-sun" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">气象站实时数据</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1.2s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#4caf50';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-bug" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">虫情监测设备</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1.4s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#4caf50';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-tree" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">苗情监测系统</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="success-story" style="animation: fadeIn 2s ease-in-out; background: rgba(76, 175, 80, 0.25); border-left: 4px solid #4caf50; padding: 0.8rem; text-align: left; border-radius: 0 10px 10px 0; font-size: 0.95rem; margin-top: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;" onmouseover="this.style.transform='translateX(5px)'; this.style.background='rgba(76, 175, 80, 0.35)';" onmouseout="this.style.transform='translateX(0)'; this.style.background='rgba(76, 175, 80, 0.25)';">
+                            <i class="bi bi-check-circle-fill" style="color: #4caf50; margin-right: 8px; text-shadow: 0 0 5px rgba(0,0,0,0.3);"></i>
+                            <span style="color: white; text-shadow: 0 0 8px rgba(0,0,0,0.6);">在铁岭市昌图县试点，成功预警玉米螟虫害，提前14天发现虫情，减少农药使用30%，节约防治成本50万元。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 添加查看更多按钮 -->
+            <div class="row">
+                <div class="col-12 text-center mt-4">
+                    <a href="#ai-section" class="btn btn-success btn-lg px-4 py-2 scroll-btn" style="border-radius: 50px; font-weight: 600; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.5); border: none; position: relative; overflow: hidden; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(76, 175, 80, 0.7)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(76, 175, 80, 0.5)';">
+                        <span style="position: relative; z-index: 2;">
+                            <i class="bi bi-chevron-double-down me-2"></i>查看更多
+                        </span>
+                        <span style="position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; background: linear-gradient(45deg, #4caf50, #8bc34a); opacity: 0.7; transform: rotate(25deg) translateX(-150%); transition: all 0.6s ease;" id="btn-shine"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 图像识别引擎 -->
+    <section id="ai-section" class="ai-section" style="background-color: #f7f7f7; padding: 3rem 0 0 0; margin-bottom: 0; scroll-margin-top: 70px;">
+        <div class="container">
+            <div class="section-header text-center" style="border: 3px solid #4caf50; border-radius: 15px; padding: 20px; background-color: rgba(76, 175, 80, 0.05); margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                <h2>深度学习驱动的图像识别引擎</h2>
+                <p>基于改进YOLOv7模型的高精度病虫害识别技术</p>
+            </div>
+            <div class="row g-2">
+                <!-- 识别准确率卡片 -->
+                <div class="col-md-6 mb-3">
+                    <div style="background-color: #fff; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%;">
+                        <div style="text-align: left; padding: 25px;">
+                            <div style="display: inline-block; width: 60px; height: 60px; background-color: #4caf50; border-radius: 50%; text-align: center; margin-bottom: 20px;">
+                                <i class="bi bi-bullseye" style="color: white; font-size: 32px; line-height: 60px;"></i>
+                    </div>
+                            <h3 style="font-size: 20px; margin-bottom: 15px; font-weight: 600;">识别准确率</h3>
+                            <p style="color: #666; margin-bottom: 15px;">采用改进的YOLOv7模型，通过迁移学习策略，病虫害检测准确率达到97.8%</p>
+                            <div class="progress mb-3" style="height: 6px; background-color: #e9ecef; border-radius: 3px;">
+                                <div class="progress-bar" role="progressbar" style="width: 97.8%; background-color: #4caf50;" aria-valuenow="97.8" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                            <div style="text-align: center; margin-top: 15px;">
+                                <span style="font-size: 28px; font-weight: 700; color: #4caf50;">97.8%</span>
+                            </div>
+                            </div>
+                        </div>
+                            </div>
+                
+                <!-- 数据样本库卡片 -->
+                <div class="col-md-6 mb-3">
+                    <div style="background-color: #fff; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%;">
+                        <div style="text-align: left; padding: 25px;">
+                            <div style="display: inline-block; width: 60px; height: 60px; background-color: #4caf50; border-radius: 50%; text-align: center; margin-bottom: 20px;">
+                                <i class="bi bi-database-add" style="color: white; font-size: 28px; line-height: 60px;"></i>
+                            </div>
+                            <h3 style="font-size: 20px; margin-bottom: 15px; font-weight: 600;">数据样本库</h3>
+                            <p style="color: #666; margin-bottom: 15px;">通过数据增强技术扩充样本至30万张，涵盖玉米大斑病、水稻纹枯病等16类常见病害</p>
+                            <div class="row text-center mt-3">
+                                <div class="col-6">
+                                    <span style="font-size: 28px; font-weight: 700; color: #4caf50; display: block;">30<small style="font-size: 16px; position: relative; top: -2px;">万</small></span>
+                                    <span style="font-size: 14px; color: #888;">样本图像</span>
+                        </div>
+                                <div class="col-6">
+                                    <span style="font-size: 28px; font-weight: 700; color: #4caf50; display: block;">16</span>
+                                    <span style="font-size: 14px; color: #888;">病害类型</span>
+                            </div>
+                            </div>
+                        </div>
+                            </div>
+                            </div>
+                
+                <!-- 响应速度卡片 -->
+                <div class="col-md-6 mb-3">
+                    <div style="background-color: #fff; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%;">
+                        <div style="text-align: left; padding: 25px;">
+                            <div style="display: inline-block; width: 60px; height: 60px; background-color: #4caf50; border-radius: 50%; text-align: center; margin-bottom: 20px;">
+                                <i class="bi bi-lightning-charge" style="color: white; font-size: 30px; line-height: 60px;"></i>
+                            </div>
+                            <h3 style="font-size: 20px; margin-bottom: 15px; font-weight: 600;">响应速度</h3>
+                            <p style="color: #666; margin-bottom: 15px;">支持移动端实时拍摄诊断，平均响应时间低于0.3秒，为农户提供即时防治建议</p>
+                            <div style="text-align: center; margin-top: 15px;">
+                                <span style="font-size: 28px; font-weight: 700; color: #4caf50; display: block;">0.3<small style="font-size: 16px; position: relative; top: -2px;">秒</small></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 便捷操作卡片 -->
+                <div class="col-md-6 mb-3">
+                    <div style="background-color: #fff; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%;">
+                        <div style="text-align: left; padding: 25px;">
+                            <div style="display: inline-block; width: 60px; height: 60px; background-color: #4caf50; border-radius: 50%; text-align: center; margin-bottom: 20px;">
+                                <i class="bi bi-phone" style="color: white; font-size: 28px; line-height: 60px;"></i>
+                            </div>
+                            <h3 style="font-size: 20px; margin-bottom: 15px; font-weight: 600;">便捷操作</h3>
+                            <p style="color: #666; margin-bottom: 15px;">农户只需使用手机拍摄照片，系统自动分析病害类型、严重程度，并提供精准防治方案</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ai-demo-section text-center mt-4" style="background: linear-gradient(135deg, #ffffff, #f0f7f0); border-radius: 15px; padding: 40px; box-shadow: 0 10px 30px rgba(76, 175, 80, 0.2); border: 3px solid #4caf50; position: relative; overflow: hidden; margin-bottom: 40px;">
+                <!-- 添加背景装饰元素 -->
+                <div style="position: absolute; top: -30px; right: -30px; width: 150px; height: 150px; background-color: rgba(76, 175, 80, 0.1); border-radius: 50%;"></div>
+                <div style="position: absolute; bottom: -40px; left: -40px; width: 200px; height: 200px; background-color: rgba(76, 175, 80, 0.07); border-radius: 50%;"></div>
+                
+                <div style="position: relative; z-index: 2;">
+                    <div style="display: inline-block; background-color: #4caf50; padding: 10px 30px; border-radius: 30px; margin-bottom: 20px;">
+                        <h3 class="demo-title" style="font-size: 26px; margin: 0; font-weight: 700; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">在线农情疾病诊断</h3>
+                    </div>
+                    <p class="demo-subtitle" style="color: #333; margin-bottom: 25px; font-size: 18px;">上传农作物照片，快速识别病虫害，获取防治方案</p>
+                    <div class="demo-buttons" style="margin-bottom: 20px;">
+                        <button id="init-model-btn" class="btn btn-success btn-lg" style="border-radius: 50px; background-color: #4caf50; border: none; padding: 12px 30px; font-size: 18px; font-weight: 600; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);">
+                            <i class="bi bi-cpu me-2"></i> 初始化模型
+                        </button>
+                        <button id="test-detection-btn" class="btn btn-outline-success btn-lg ms-3" style="border-radius: 50px; display:none; border: 2px solid #4caf50; padding: 12px 30px; font-size: 18px; font-weight: 600; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);">
+                            <i class="bi bi-upload me-2"></i> 农作物上传
+                        </button>
+                    </div>
+                    <div id="model-status-wrapper" class="mt-4">
+                        <p><span id="model-init-status" class="status-waiting" style="display: inline-flex; align-items: center; font-size: 16px;">
+                            <span style="display: inline-block; width: 14px; height: 14px; background-color: #999; border-radius: 50%; margin-right: 8px;"></span>
+                            等待初始化
+                        </span></p>
+                    </div>
+                    
+                    <!-- 添加图片上传区域 -->
+                    <div id="upload-section" class="mt-4" style="display: none;">
+                        <div class="upload-zone" style="border: 3px dashed #4caf50; padding: 50px; border-radius: 12px; cursor: pointer; background-color: rgba(76, 175, 80, 0.05); transition: all 0.3s ease;">
+                            <i class="bi bi-cloud-upload" style="font-size: 64px; color: #4caf50;"></i>
+                            <p class="mt-3 mb-1" style="font-size: 18px; color: #333;">点击或拖拽图片到这里上传</p>
+                            <p style="font-size: 14px; color: #666;">支持JPG、PNG格式图片</p>
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        </div>
+                        
+                        <div id="preview-container" class="mt-5" style="display: none;">
+                            <h4 style="font-size: 22px; margin-bottom: 20px; font-weight: 600; color: #333;">预览图片</h4>
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div style="position: relative; max-width: 100%; border: 1px solid #e0e0e0; padding: 5px; background-color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.08); border-radius: 10px;">
+                                        <img id="preview-image" src="" alt="预览图片" style="max-width: 100%; border-radius: 6px;">
+                                        <canvas id="detection-canvas" style="position: absolute; top: 5px; left: 5px; width: calc(100% - 10px); height: calc(100% - 10px);"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-4">
+                                <button id="analyze-btn" class="btn btn-success btn-lg" style="border-radius: 50px; padding: 12px 40px; font-size: 18px; font-weight: 600; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);">
+                                    <i class="bi bi-search me-2"></i> 开始分析
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 识别结果展示区域 -->
+                        <div id="results-container" class="mt-5" style="display: none;">
+                            <h4 style="font-size: 22px; margin-bottom: 20px; font-weight: 600; position: relative; display: inline-block; color: #333;">
+                                <span style="position: relative; z-index: 1;">识别结果</span>
+                                <span style="position: absolute; bottom: 0; left: 0; width: 100%; height: 8px; background-color: rgba(76, 175, 80, 0.2); z-index: 0;"></span>
+                            </h4>
+                            <div class="results-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 数据可视化平台 -->
+    <section class="visualization-section" style="padding-top: 0; margin-top: 0;">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>多维数据分析与可视化平台</h2>
+                <p>基于Hadoop生态构建的分布式数据处理架构</p>
+            </div>
+            <div class="dashboard-container" style="margin-top: 30px; background-color: #1a2035; border-radius: 15px; padding: 20px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                <!-- 顶部导航与时间 -->
+                <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
+                    <div class="dashboard-title" style="color: white; font-size: 20px; font-weight: 600;">
+                        <i class="bi bi-grid-3x3-gap-fill" style="color: #4caf50; margin-right: 10px;"></i>农业数据监控中心
+                            </div>
+                    <div class="dashboard-time" style="color: #8b92a9; font-size: 14px;">
+                        <span id="dashboard-date">2025年04月15日</span>
+                        <span style="margin: 0 10px;">|</span>
+                        <span id="dashboard-time">14:35:22</span>
+                        <span class="dashboard-refresh" style="margin-left: 15px; color: #4caf50; cursor: pointer;">
+                            <i class="bi bi-arrow-repeat"></i> 实时刷新
+                        </span>
+                            </div>
+                        </div>
+
+                <!-- 指标卡片行 -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card" style="background: linear-gradient(45deg, #263238, #37474f); border-radius: 10px; padding: 20px; height: 100%; position: relative; overflow: hidden; color: white;">
+                            <div style="position: absolute; top: -15px; right: -15px; font-size: 80px; opacity: 0.1;">
+                                <i class="bi bi-thermometer-half"></i>
+                            </div>
+                            <div class="stat-title" style="font-size: 14px; color: #98a6ad; margin-bottom: 10px;">区域平均温度</div>
+                            <div class="stat-value" style="font-size: 28px; font-weight: 700; margin-bottom: 5px;">24.5°C</div>
+                            <div class="stat-compare" style="font-size: 12px;">
+                                <span style="color: #4caf50;"><i class="bi bi-arrow-up-right"></i> +1.3°C</span>
+                                <span style="margin-left: 5px; color: #98a6ad;">同比上周</span>
+                            </div>
+                        </div>
+                            </div>
+                    <div class="col-md-3">
+                        <div class="stat-card" style="background: linear-gradient(45deg, #1a237e, #303f9f); border-radius: 10px; padding: 20px; height: 100%; position: relative; overflow: hidden; color: white;">
+                            <div style="position: absolute; top: -15px; right: -15px; font-size: 80px; opacity: 0.1;">
+                                <i class="bi bi-droplet-half"></i>
+                            </div>
+                            <div class="stat-title" style="font-size: 14px; color: #98a6ad; margin-bottom: 10px;">土壤平均湿度</div>
+                            <div class="stat-value" style="font-size: 28px; font-weight: 700; margin-bottom: 5px;">34.2%</div>
+                            <div class="stat-compare" style="font-size: 12px;">
+                                <span style="color: #ff5252;"><i class="bi bi-arrow-down-right"></i> -2.8%</span>
+                                <span style="margin-left: 5px; color: #98a6ad;">同比上周</span>
+                        </div>
+                            </div>
+                            </div>
+                    <div class="col-md-3">
+                        <div class="stat-card" style="background: linear-gradient(45deg, #311b92, #4527a0); border-radius: 10px; padding: 20px; height: 100%; position: relative; overflow: hidden; color: white;">
+                            <div style="position: absolute; top: -15px; right: -15px; font-size: 80px; opacity: 0.1;">
+                                <i class="bi bi-cloud-rain"></i>
+                        </div>
+                            <div class="stat-title" style="font-size: 14px; color: #98a6ad; margin-bottom: 10px;">本周降水量</div>
+                            <div class="stat-value" style="font-size: 28px; font-weight: 700; margin-bottom: 5px;">32.5mm</div>
+                            <div class="stat-compare" style="font-size: 12px;">
+                                <span style="color: #4caf50;"><i class="bi bi-arrow-up-right"></i> +12.5mm</span>
+                                <span style="margin-left: 5px; color: #98a6ad;">同比上周</span>
+                    </div>
+                    </div>
+                </div>
+                    <div class="col-md-3">
+                        <div class="stat-card" style="background: linear-gradient(45deg, #004d40, #00695c); border-radius: 10px; padding: 20px; height: 100%; position: relative; overflow: hidden; color: white;">
+                            <div style="position: absolute; top: -15px; right: -15px; font-size: 80px; opacity: 0.1;">
+                                <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                            <div class="stat-title" style="font-size: 14px; color: #98a6ad; margin-bottom: 10px;">病虫害预警</div>
+                            <div class="stat-value" style="font-size: 28px; font-weight: 700; margin-bottom: 5px;">3起</div>
+                            <div class="stat-compare" style="font-size: 12px;">
+                                <span style="color: #ff5252;"><i class="bi bi-arrow-up-right"></i> +1起</span>
+                                <span style="margin-left: 5px; color: #98a6ad;">同比上周</span>
+                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 主要数据区域 -->
+                <div class="row g-3">
+                    <!-- 左侧图表区域 -->
+                    <div class="col-md-8">
+                        <!-- 土壤墒情监测图表 -->
+                        <div class="dashboard-panel" style="background-color: #252b3b; border-radius: 10px; padding: 20px; margin-bottom: 15px;">
+                            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div class="panel-title" style="color: white; font-size: 16px; font-weight: 600;">
+                                    <i class="bi bi-moisture" style="color: #4caf50; margin-right: 8px;"></i>土壤墒情监测
+                                </div>
+                                <div class="panel-actions" style="display: flex; align-items: center;">
+                                    <span style="color: #8b92a9; font-size: 13px; margin-right: 15px;">
+                                        <i class="bi bi-calendar3"></i> 最近7天
+                                    </span>
+                                    <a href="#" style="color: #4caf50; font-size: 18px;">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="position: relative; height: 280px;">
+                                <!-- 替换静态图像为Canvas元素 -->
+                                <canvas id="soil-moisture-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- 作物生长监测 -->
+                        <div class="dashboard-panel" style="background-color: #252b3b; border-radius: 10px; padding: 20px;">
+                            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div class="panel-title" style="color: white; font-size: 16px; font-weight: 600;">
+                                    <i class="bi bi-bar-chart-line" style="color: #4caf50; margin-right: 8px;"></i>作物生长指数分析
+                                </div>
+                                <div class="panel-actions" style="display: flex; align-items: center;">
+                                    <span style="color: #8b92a9; font-size: 13px; margin-right: 15px;">
+                                        <i class="bi bi-calendar3"></i> 本生长季
+                                    </span>
+                                    <a href="#" style="color: #4caf50; font-size: 18px;">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="position: relative; height: 260px;">
+                                <!-- 替换静态图像为Canvas元素 -->
+                                <canvas id="crop-growth-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧信息区域 -->
+                    <div class="col-md-4">
+                        <!-- 地区分布热力图 -->
+                        <div class="dashboard-panel" style="background-color: #252b3b; border-radius: 10px; padding: 20px; margin-bottom: 15px;">
+                            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div class="panel-title" style="color: white; font-size: 16px; font-weight: 600;">
+                                    <i class="bi bi-map" style="color: #4caf50; margin-right: 8px;"></i>监测点分布
+                                </div>
+                                <div class="panel-actions">
+                                    <a href="#" style="color: #4caf50; font-size: 18px;">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="map-container" style="position: relative; height: 230px;">
+                                <!-- 替换静态图像为Canvas元素 -->
+                                <canvas id="distribution-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- 预警信息 -->
+                        <div class="dashboard-panel" style="background-color: #252b3b; border-radius: 10px; padding: 20px;">
+                            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div class="panel-title" style="color: white; font-size: 16px; font-weight: 600;">
+                                    <i class="bi bi-bell" style="color: #ff5252; margin-right: 8px;"></i>实时预警通知
+                                </div>
+                                <div class="panel-actions">
+                                    <a href="#" style="color: #4caf50; font-size: 18px;">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="alert-list" style="height: 310px; overflow-y: auto;">
+                                <div class="alert-item" style="padding: 12px 15px; border-left: 3px solid #ff5252; background-color: rgba(255,82,82,0.1); margin-bottom: 10px; border-radius: 0 5px 5px 0;">
+                                    <div class="alert-time" style="font-size: 12px; color: #8b92a9; margin-bottom: 5px;">2025-04-15 13:45</div>
+                                    <div class="alert-content" style="color: #e0e0e0; font-size: 14px;">昌图县北部地区检测到玉米螟虫密度超过预警阈值，建议及时防治</div>
+                                </div>
+                                <div class="alert-item" style="padding: 12px 15px; border-left: 3px solid #ff9800; background-color: rgba(255,152,0,0.1); margin-bottom: 10px; border-radius: 0 5px 5px 0;">
+                                    <div class="alert-time" style="font-size: 12px; color: #8b92a9; margin-bottom: 5px;">2025-04-15 10:22</div>
+                                    <div class="alert-content" style="color: #e0e0e0; font-size: 14px;">营口市老边区土壤湿度低于30%，建议适时灌溉</div>
+                                </div>
+                                <div class="alert-item" style="padding: 12px 15px; border-left: 3px solid #ff9800; background-color: rgba(255,152,0,0.1); margin-bottom: 10px; border-radius: 0 5px 5px 0;">
+                                    <div class="alert-time" style="font-size: 12px; color: #8b92a9; margin-bottom: 5px;">2025-04-14 16:10</div>
+                                    <div class="alert-content" style="color: #e0e0e0; font-size: 14px;">锦州市义县东部水稻区域检测到稻瘟病初期症状，建议密切监控</div>
+                                </div>
+                                <div class="alert-item" style="padding: 12px 15px; border-left: 3px solid #4caf50; background-color: rgba(76,175,80,0.1); margin-bottom: 10px; border-radius: 0 5px 5px 0;">
+                                    <div class="alert-time" style="font-size: 12px; color: #8b92a9; margin-bottom: 5px;">2025-04-14 08:35</div>
+                                    <div class="alert-content" style="color: #e0e0e0; font-size: 14px;">系统已完成所有监测点的每日数据同步，共处理数据52.6万条</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 底部操作栏 -->
+                <div class="dashboard-footer" style="margin-top: 20px; display: flex; justify-content: center; padding: 15px 0; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <a href="#" class="btn" style="background-color: #2e3649; color: white; border: none; margin: 0 5px; padding: 8px 15px; border-radius: 5px; font-size: 14px;">
+                        <i class="bi bi-download" style="margin-right: 5px;"></i> 导出数据
+                    </a>
+                    <a href="#" class="btn" style="background-color: #2e3649; color: white; border: none; margin: 0 5px; padding: 8px 15px; border-radius: 5px; font-size: 14px;">
+                        <i class="bi bi-printer" style="margin-right: 5px;"></i> 打印报告
+                    </a>
+                    <a href="#" class="btn" style="background-color: #4caf50; color: white; border: none; margin: 0 5px; padding: 8px 15px; border-radius: 5px; font-size: 14px;">
+                        <i class="bi bi-sliders" style="margin-right: 5px;"></i> 配置仪表盘
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 数据大屏操作提示 -->
+            <div class="dashboard-help text-center mt-4">
+                <p style="color: #666; font-size: 14px;">点击"全屏查看"按钮，体验完整大屏数据可视化效果</p>
+                <a href="#" class="btn btn-outline-success" style="border-radius: 50px; padding: 10px 25px;">
+                    <i class="bi bi-fullscreen me-2"></i> 全屏查看
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 设备与部署 -->
+    <section class="devices-section bg-light" style="padding-bottom: 1rem; margin-bottom: 0; background: url('../images/n004.png'); background-size: cover; background-position: center; position: relative;">
+        <!-- 添加半透明遮罩 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.6);"></div>
+        <div class="container" style="position: relative; z-index: 1; color: white;">
+            <div class="section-header text-center">
+                <h2 style="color: white;">田间设备与部署方案</h2>
+                <p style="color: rgba(255, 255, 255, 0.8);">全方位覆盖农田监测需求</p>
+            </div>
+            <div class="row g-2">
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <div class="device-card" style="margin-bottom: 0; background-color: rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);">
+                        <div class="device-info" style="padding: 15px;">
+                            <h3 style="color: white; font-size: 18px; margin-bottom: 10px;">土壤墒情传感器</h3>
+                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">监测土壤湿度、温度、电导率等参数，精度±2%，续航3年</p>
+                            <ul class="device-features" style="color: rgba(255, 255, 255, 0.7); padding-left: 20px; margin-top: 10px; font-size: 13px;">
+                                <li>IP67防水等级</li>
+                                <li>低功耗设计</li>
+                                <li>无线传输</li>
+                                <li>高精度采集</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <div class="device-card" style="margin-bottom: 0; background-color: rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);">
+                        <div class="device-info" style="padding: 15px;">
+                            <h3 style="color: white; font-size: 18px; margin-bottom: 10px;">智能气象站</h3>
+                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">全天候监测气温、湿度、风向、降水量等多项气象数据</p>
+                            <ul class="device-features" style="color: rgba(255, 255, 255, 0.7); padding-left: 20px; margin-top: 10px; font-size: 13px;">
+                                <li>太阳能供电</li>
+                                <li>4G/5G通信</li>
+                                <li>抗恶劣天气</li>
+                                <li>自动校准</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <div class="device-card" style="margin-bottom: 0; background-color: rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);">
+                       
+                        <div class="device-info" style="padding: 15px;">
+                            <h3 style="color: white; font-size: 18px; margin-bottom: 10px;">智能虫情监测仪</h3>
+                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">采用AI识别技术，24小时监测田间虫害动态变化</p>
+                            <ul class="device-features" style="color: rgba(255, 255, 255, 0.7); padding-left: 20px; margin-top: 10px; font-size: 13px;">
+                                <li>图像识别</li>
+                                <li>自动计数</li>
+                                <li>种类分析</li>
+                                <li>预警推送</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <div class="device-card" style="margin-bottom: 0; background-color: rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);">
+                       
+                        <div class="device-info" style="padding: 15px;">
+                            <h3 style="color: white; font-size: 18px; margin-bottom: 10px;">植物表型监测仪</h3>
+                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">通过多光谱成像技术分析作物生长状态和健康水平</p>
+                            <ul class="device-features" style="color: rgba(255, 255, 255, 0.7); padding-left: 20px; margin-top: 10px; font-size: 13px;">
+                                <li>叶绿素测量</li>
+                                <li>植株分析</li>
+                                <li>生长建模</li>
+                                <li>营养诊断</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="deployment-map text-center mt-3">
+                <h3 style="color: white;">典型部署方案</h3>
+                <p class="mt-3" style="color: rgba(255, 255, 255, 0.8);">根据种植面积、地形地貌和作物类型，定制最佳传感器部署方案</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section class="contact-section bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2>想了解更多或试用我们的监测系统？</h2>
+                    <p>填写表单，我们的技术专家将为您提供详细解答和演示</p>
+                </div>
+                <div class="col-lg-6">
+                    <form class="contact-form">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" placeholder="您的姓名" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="tel" class="form-control" placeholder="联系电话" required>
+                            </div>
+                            <div class="col-12">
+                                <input type="email" class="form-control" placeholder="电子邮箱" required>
+                            </div>
+                            <div class="col-12">
+                                <select class="form-select">
+                                    <option selected>您的种植规模</option>
+                                    <option>50亩以下</option>
+                                    <option>50-200亩</option>
+                                    <option>200-1000亩</option>
+                                    <option>1000亩以上</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <textarea class="form-control" rows="3" placeholder="您想了解的内容或遇到的问题"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-light">提交咨询</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="footer-info">
+                      
+                        <p>智农慧眼致力于通过AI技术重构传统农业生产流程，帮助农户提高产量、降低成本，推动农业现代化发展。</p>
+                        <div class="social-links">
+                            <a href="#"><i class="bi bi-wechat"></i></a>
+                            <a href="#"><i class="bi bi-tencent-qq"></i></a>
+                            <a href="#"><i class="bi bi-sina-weibo"></i></a>
+                            <a href="#"><i class="bi bi-envelope-fill"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">首页</a></li>
+                        <li><a href="monitoring.html">农情监测</a></li>
+                        <li><a href="decision.html">种植决策</a></li>
+                        <li><a href="tracing.html">质量追溯</a></li>
+                        <li><a href="knowledge.html">知识服务</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h4>支持中心</h4>
+                    <ul class="footer-links">
+                        <li><a href="help.html">帮助中心</a></li>
+                        <li><a href="faq.html">常见问题</a></li>
+                        <li><a href="download.html">APP下载</a></li>
+                        <li><a href="training.html">培训教程</a></li>
+                        <li><a href="feedback.html">问题反馈</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h4>联系我们</h4>
+                    <div class="contact-info">
+                        <p><i class="bi bi-geo-alt-fill"></i> 辽宁省大连市沙河口区大连海洋大学</p>
+                        <p><i class="bi bi-telephone-fill"></i> 13033229487</p>
+                        <p><i class="bi bi-envelope-fill"></i> 13470118418@163.com</p>
+                        <p><i class="bi bi-clock-fill"></i> 工作时间: 周一至周五 9:00-18:00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 智农慧眼 - AI驱动下的精准种植与智能农业管理平台 | 辽ICP备20254321号</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <a href="#" class="back-to-top">
+        <i class="bi bi-arrow-up"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/main.js"></script>
+
+    <!-- 添加API服务器模拟脚本 -->
+    <script>
+        // 模拟后端API服务
+        (function() {
+            // 重写fetch以模拟API响应
+            const originalFetch = window.fetch;
+            window.fetch = function(url, options) {
+                if (url === '/api/model/init') {
+                    console.log('模拟初始化模型API调用', options.body);
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve({
+                                ok: true,
+                                json: () => Promise.resolve({
+                                    success: true,
+                                    message: 'YOLOv7-ZZ模型已成功加载'
+                                })
+                            });
+                        }, 2000);
+                    });
+                } 
+                
+                if (url === '/api/detect') {
+                    console.log('模拟图像检测API调用');
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            // 随机选择检测结果
+                            const resultTemplates = [
+                                { 
+                                    class: '玉米大斑病', 
+                                    confidence: 0.97, 
+                                    bbox: [100, 80, 250, 180],
+                                    description: '由真菌引起的常见玉米病害，主要表现为叶片上的大型褐色病斑，严重影响光合作用。',
+                                    suggestion: '1. 及时喷施丙环唑或戊唑醇等杀菌剂；2. 增强通风，降低田间湿度；3. 下一季注意轮作，减少病原菌累积。'
+                                },
+                                { 
+                                    class: '水稻纹枯病', 
+                                    confidence: 0.89, 
+                                    bbox: [320, 190, 200, 150],
+                                    description: '由真菌引起的水稻常见病害，叶鞘和叶片上出现褐色边缘不规则病斑，严重时可导致整株死亡。',
+                                    suggestion: '1. 适当通风增光，降低湿度；2. 使用咪鲜胺或井冈霉素防治；3. 适当控制氮肥施用量，增施钾肥。'
+                                },
+                                { 
+                                    class: '小麦条锈病', 
+                                    confidence: 0.94, 
+                                    bbox: [150, 100, 200, 170],
+                                    description: '小麦最具破坏性的病害之一，在叶片上形成黄褐色条纹状锈斑，严重影响小麦产量。',
+                                    suggestion: '1. 喷施三唑酮或丙环唑等杀菌剂；2. 种植抗病品种；3. 合理密植，避免高湿环境。'
+                                },
+                                { 
+                                    class: '棉花枯萎病', 
+                                    confidence: 0.91, 
+                                    bbox: [200, 150, 180, 160],
+                                    description: '由土壤中的真菌侵染根部引起，植株叶片黄化萎蔫，导维管束变褐，严重影响产量。',
+                                    suggestion: '1. 采用高温闷棚消毒；2. 淹水处理杀灭病原菌；3. 使用嘧菌酯等药剂处理土壤；4. 实施轮作。'
+                                },
+                                { 
+                                    class: '黄瓜霜霉病', 
+                                    confidence: 0.93, 
+                                    bbox: [220, 130, 190, 150],
+                                    description: '主要危害叶片，形成黄色多角形病斑，叶背面长有灰紫色霉层，湿度大时蔓延迅速。',
+                                    suggestion: '1. 使用烯酰吗啉或氟吗啉进行预防喷施；2. 合理通风，减少湿度；3. 及时清除病叶；4. 轮作换茬。'
+                                }
+                            ];
+                            
+                            // 随机返回1-2个结果
+                            const resultCount = Math.floor(Math.random() * 2) + 1;
+                            const selectedResults = [];
+                            
+                            for (let i = 0; i < resultCount; i++) {
+                                const randomIdx = Math.floor(Math.random() * resultTemplates.length);
+                                // 轻微修改置信度和边界框，增加随机性
+                                const result = {...resultTemplates[randomIdx]};
+                                result.confidence = Math.min(0.99, result.confidence + (Math.random() * 0.05 - 0.025));
+                                
+                                // 调整边界框位置
+                                result.bbox = result.bbox.map(val => Math.max(20, val + Math.floor(Math.random() * 40 - 20)));
+                                
+                                selectedResults.push(result);
+                            }
+                            
+                            resolve({
+                                ok: true,
+                                json: () => Promise.resolve(selectedResults)
+                            });
+                        }, 1500);
+                    });
+                }
+                
+                // 对于其他请求，使用原始fetch
+                return originalFetch(url, options);
+            };
+        })();
+    </script>
+
+    <!-- 数据可视化平台交互脚本 -->
+    <script>
+        // 当DOM加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 实时更新仪表盘时间
+            function updateDashboardTime() {
+                const now = new Date();
+                const dateStr = now.getFullYear() + '年' + 
+                               (now.getMonth() + 1).toString().padStart(2, '0') + '月' + 
+                               now.getDate().toString().padStart(2, '0') + '日';
+                const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
+                               now.getMinutes().toString().padStart(2, '0') + ':' + 
+                               now.getSeconds().toString().padStart(2, '0');
+                
+                document.getElementById('dashboard-date').textContent = dateStr;
+                document.getElementById('dashboard-time').textContent = timeStr;
+            }
+            
+            // 初始化时间并每秒更新
+            updateDashboardTime();
+            setInterval(updateDashboardTime, 1000);
+            
+            // 刷新按钮动画与功能
+            const refreshBtn = document.querySelector('.dashboard-refresh');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 添加旋转动画
+                    const refreshIcon = this.querySelector('i');
+                    refreshIcon.classList.add('rotate-animation');
+                    
+                    // 模拟数据刷新
+                    setTimeout(() => {
+                        updateRandomData();
+                        refreshIcon.classList.remove('rotate-animation');
+                        
+                        // 显示刷新成功提示
+                        showToast('数据已成功刷新');
+                    }, 1200);
+                });
+            }
+            
+            // 添加操作按钮交互
+            const actionButtons = document.querySelectorAll('.dashboard-footer .btn');
+            actionButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const action = this.textContent.trim();
+                    
+                    if (action.includes('导出数据')) {
+                        showToast('数据导出中，请稍候...');
+                        setTimeout(() => {
+                            showToast('数据已成功导出到本地文件');
+                        }, 1500);
+                    } else if (action.includes('打印报告')) {
+                        showToast('正在准备打印报告...');
+                        setTimeout(() => {
+                            window.print();
+                        }, 800);
+                    } else if (action.includes('配置仪表盘')) {
+                        showModalDialog('仪表盘配置', '请选择要显示的数据指标和图表类型');
+                    }
+                });
+            });
+            
+            // 为预警信息添加点击交互
+            const alertItems = document.querySelectorAll('.alert-item');
+            alertItems.forEach(item => {
+                item.style.cursor = 'pointer';
+                item.addEventListener('click', function() {
+                    const alertContent = this.querySelector('.alert-content').textContent;
+                    showModalDialog('预警详情', alertContent, true);
+                });
+            });
+            
+            // 添加指标卡片悬停效果
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                    this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+            
+            // 全屏查看功能
+            const fullscreenBtn = document.querySelector('.dashboard-help .btn');
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const dashboardContainer = document.querySelector('.dashboard-container');
+                    if (!document.fullscreenElement) {
+                        // 进入全屏模式
+                        if (dashboardContainer.requestFullscreen) {
+                            dashboardContainer.requestFullscreen();
+                        } else if (dashboardContainer.webkitRequestFullscreen) {
+                            dashboardContainer.webkitRequestFullscreen();
+                        } else if (dashboardContainer.msRequestFullscreen) {
+                            dashboardContainer.msRequestFullscreen();
+                        }
+                        
+                        // 更改按钮图标和文字
+                        this.innerHTML = '<i class="bi bi-fullscreen-exit me-2"></i> 退出全屏';
+                    } else {
+                        // 退出全屏模式
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        } else if (document.msExitFullscreen) {
+                            document.msExitFullscreen();
+                        }
+                        
+                        // 恢复按钮
+                        this.innerHTML = '<i class="bi bi-fullscreen me-2"></i> 全屏查看';
+                    }
+                });
+                
+                // 监听fullscreenchange事件
+                document.addEventListener('fullscreenchange', function() {
+                    if (!document.fullscreenElement) {
+                        fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen me-2"></i> 全屏查看';
+                    }
+                });
+            }
+            
+            // 辅助函数：更新随机数据
+            function updateRandomData() {
+                // 随机更新温度
+                const tempVal = document.querySelector('.stat-card:nth-child(1) .stat-value');
+                const newTemp = (22 + Math.random() * 5).toFixed(1);
+                tempVal.textContent = newTemp + '°C';
+                
+                // 随机更新土壤湿度
+                const humidityVal = document.querySelector('.stat-card:nth-child(2) .stat-value');
+                const newHumidity = Math.floor(28 + Math.random() * 12);
+                humidityVal.textContent = newHumidity + '%';
+                
+                // 随机更新降水量
+                const rainVal = document.querySelector('.stat-card:nth-child(3) .stat-value');
+                const newRain = Math.floor(25 + Math.random() * 15);
+                rainVal.textContent = newRain + 'mm';
+                
+                // 随机更新预警次数
+                const alertVal = document.querySelector('.stat-card:nth-child(4) .stat-value');
+                const newAlerts = Math.floor(1 + Math.random() * 4);
+                alertVal.textContent = newAlerts + '起';
+                
+                // 更新图表数据
+                if (soilMoistureChart) {
+                    const newData = soilMoistureChartData.datasets[0].data.map(() => 
+                        Math.floor(25 + Math.random() * 20)
+                    );
+                    soilMoistureChart.data.datasets[0].data = newData;
+                    soilMoistureChart.update();
+                }
+                
+                if (cropGrowthChart) {
+                    const newData = cropGrowthChartData.datasets[0].data.map(() => 
+                        (0.6 + Math.random() * 0.3).toFixed(2)
+                    );
+                    cropGrowthChart.data.datasets[0].data = newData;
+                    cropGrowthChart.update();
+                }
+                
+                if (regionMonitoringChart) {
+                    regionMonitoringChart.data.datasets[0].data = [
+                        Math.floor(5 + Math.random() * 15),
+                        Math.floor(5 + Math.random() * 15),
+                        Math.floor(5 + Math.random() * 15),
+                        Math.floor(5 + Math.random() * 15),
+                        Math.floor(5 + Math.random() * 15)
+                    ];
+                    regionMonitoringChart.update();
+                }
+                
+                // 添加新的预警信息
+                if (Math.random() > 0.6) {
+                    const alertList = document.querySelector('.alert-list');
+                    const newAlert = document.createElement('div');
+                    newAlert.className = 'alert-item';
+                    newAlert.style.padding = '12px 15px';
+                    newAlert.style.borderLeft = '3px solid #ff5252';
+                    newAlert.style.backgroundColor = 'rgba(255,82,82,0.1)';
+                    newAlert.style.marginBottom = '10px';
+                    newAlert.style.borderRadius = '0 5px 5px 0';
+                    newAlert.style.cursor = 'pointer';
+                    
+                    const now = new Date();
+                    const timeStr = now.getFullYear() + '-' + 
+                                   (now.getMonth() + 1).toString().padStart(2, '0') + '-' + 
+                                   now.getDate().toString().padStart(2, '0') + ' ' +
+                                   now.getHours().toString().padStart(2, '0') + ':' +
+                                   now.getMinutes().toString().padStart(2, '0');
+                    
+                    newAlert.innerHTML = `
+                        <div class="alert-time" style="font-size: 12px; color: #8b92a9; margin-bottom: 5px;">${timeStr}</div>
+                        <div class="alert-content" style="color: #e0e0e0; font-size: 14px;">系统检测到新的预警信息，点击查看详情</div>
+                    `;
+                    
+                    // 添加交互事件
+                    newAlert.addEventListener('click', function() {
+                        showModalDialog('最新预警', '系统刚刚检测到新的潜在风险，请立即关注！', true);
+                    });
+                    
+                    // 插入到列表顶部
+                    if (alertList.firstChild) {
+                        alertList.insertBefore(newAlert, alertList.firstChild);
+                    } else {
+                        alertList.appendChild(newAlert);
+                    }
+                    
+                    // 添加动画效果
+                    newAlert.style.animation = 'fadeIn 0.5s';
+                }
+            }
+            
+            // 创建一个提示框显示操作反馈
+            function showToast(message) {
+                // 检查是否已存在提示框，如果有则移除
+                const existingToast = document.querySelector('.dashboard-toast');
+                if (existingToast) {
+                    document.body.removeChild(existingToast);
+                }
+                
+                // 创建新的提示框
+                const toast = document.createElement('div');
+                toast.className = 'dashboard-toast';
+                toast.style.position = 'fixed';
+                toast.style.bottom = '20px';
+                toast.style.right = '20px';
+                toast.style.backgroundColor = 'rgba(0,0,0,0.8)';
+                toast.style.color = 'white';
+                toast.style.padding = '10px 20px';
+                toast.style.borderRadius = '5px';
+                toast.style.zIndex = '9999';
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                toast.textContent = message;
+                
+                document.body.appendChild(toast);
+                
+                // 显示提示框
+                setTimeout(() => { toast.style.opacity = '1'; }, 10);
+                
+                // 3秒后自动隐藏
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        if (document.body.contains(toast)) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+            
+            // 创建模态对话框
+            function showModalDialog(title, content, isAlert = false) {
+                // 创建模态框背景
+                const modalBg = document.createElement('div');
+                modalBg.className = 'modal-backdrop';
+                modalBg.style.position = 'fixed';
+                modalBg.style.top = '0';
+                modalBg.style.left = '0';
+                modalBg.style.right = '0';
+                modalBg.style.bottom = '0';
+                modalBg.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                modalBg.style.zIndex = '9998';
+                modalBg.style.display = 'flex';
+                modalBg.style.justifyContent = 'center';
+                modalBg.style.alignItems = 'center';
+                
+                // 创建模态框
+                const modal = document.createElement('div');
+                modal.className = 'dashboard-modal';
+                modal.style.backgroundColor = '#252b3b';
+                modal.style.borderRadius = '10px';
+                modal.style.width = '400px';
+                modal.style.maxWidth = '90%';
+                modal.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+                modal.style.zIndex = '9999';
+                modal.style.overflow = 'hidden';
+                
+                // 创建模态框头部
+                const modalHeader = document.createElement('div');
+                modalHeader.style.padding = '15px 20px';
+                modalHeader.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+                modalHeader.style.display = 'flex';
+                modalHeader.style.justifyContent = 'space-between';
+                modalHeader.style.alignItems = 'center';
+                
+                const modalTitle = document.createElement('h5');
+                modalTitle.style.margin = '0';
+                modalTitle.style.color = 'white';
+                modalTitle.style.fontSize = '18px';
+                modalTitle.textContent = title;
+                
+                const closeBtn = document.createElement('button');
+                closeBtn.type = 'button';
+                closeBtn.style.backgroundColor = 'transparent';
+                closeBtn.style.border = 'none';
+                closeBtn.style.color = '#999';
+                closeBtn.style.fontSize = '20px';
+                closeBtn.style.cursor = 'pointer';
+                closeBtn.innerHTML = '&times;';
+                closeBtn.onclick = function() {
+                    document.body.removeChild(modalBg);
+                };
+                
+                modalHeader.appendChild(modalTitle);
+                modalHeader.appendChild(closeBtn);
+                
+                // 创建模态框内容
+                const modalBody = document.createElement('div');
+                modalBody.style.padding = '20px';
+                modalBody.style.color = '#e0e0e0';
+                
+                if (title === '仪表盘配置') {
+                    // 显示配置选项
+                    modalBody.innerHTML = `
+                        <div style="margin-bottom: 15px;">
+                            <div style="margin-bottom: 10px; font-weight: 600;">选择显示指标</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" checked style="margin-right: 5px;"> 温度
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" checked style="margin-right: 5px;"> 湿度
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" checked style="margin-right: 5px;"> 降水量
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" checked style="margin-right: 5px;"> 病虫害预警
+                                </label>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <div style="margin-bottom: 10px; font-weight: 600;">图表类型</div>
+                            <div style="display: flex; gap: 10px;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="radio" name="chartType" checked style="margin-right: 5px;"> 折线图
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="radio" name="chartType" style="margin-right: 5px;"> 柱状图
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="radio" name="chartType" style="margin-right: 5px;"> 面积图
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="margin-bottom: 10px; font-weight: 600;">数据刷新频率</div>
+                            <select style="width: 100%; padding: 8px; background: #1a2035; color: white; border: 1px solid #444; border-radius: 5px;">
+                                <option>实时刷新</option>
+                                <option>每30秒刷新</option>
+                                <option>每分钟刷新</option>
+                                <option>每5分钟刷新</option>
+                                <option>手动刷新</option>
+                            </select>
+                        </div>
+                    `;
+                } else {
+                    // 显示普通内容
+                    modalBody.textContent = content;
+                }
+                
+                // 创建模态框底部
+                const modalFooter = document.createElement('div');
+                modalFooter.style.padding = '15px 20px';
+                modalFooter.style.borderTop = '1px solid rgba(255,255,255,0.1)';
+                modalFooter.style.display = 'flex';
+                modalFooter.style.justifyContent = 'flex-end';
+                modalFooter.style.gap = '10px';
+                
+                if (isAlert) {
+                    // 警告框只需要一个确认按钮
+                    const confirmBtn = document.createElement('button');
+                    confirmBtn.type = 'button';
+                    confirmBtn.style.backgroundColor = '#4caf50';
+                    confirmBtn.style.color = 'white';
+                    confirmBtn.style.border = 'none';
+                    confirmBtn.style.padding = '8px 15px';
+                    confirmBtn.style.borderRadius = '5px';
+                    confirmBtn.style.cursor = 'pointer';
+                    confirmBtn.textContent = '确认';
+                    confirmBtn.onclick = function() {
+                        document.body.removeChild(modalBg);
+                    };
+                    
+                    modalFooter.appendChild(confirmBtn);
+                } else {
+                    // 配置对话框需要取消和保存按钮
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.type = 'button';
+                    cancelBtn.style.backgroundColor = '#2e3649';
+                    cancelBtn.style.color = 'white';
+                    cancelBtn.style.border = 'none';
+                    cancelBtn.style.padding = '8px 15px';
+                    cancelBtn.style.borderRadius = '5px';
+                    cancelBtn.style.cursor = 'pointer';
+                    cancelBtn.textContent = '取消';
+                    cancelBtn.onclick = function() {
+                        document.body.removeChild(modalBg);
+                    };
+                    
+                    const saveBtn = document.createElement('button');
+                    saveBtn.type = 'button';
+                    saveBtn.style.backgroundColor = '#4caf50';
+                    saveBtn.style.color = 'white';
+                    saveBtn.style.border = 'none';
+                    saveBtn.style.padding = '8px 15px';
+                    saveBtn.style.borderRadius = '5px';
+                    saveBtn.style.cursor = 'pointer';
+                    saveBtn.textContent = '保存设置';
+                    saveBtn.onclick = function() {
+                        document.body.removeChild(modalBg);
+                        showToast('仪表盘配置已更新');
+                    };
+                    
+                    modalFooter.appendChild(cancelBtn);
+                    modalFooter.appendChild(saveBtn);
+                }
+                
+                // 组装模态框
+                modal.appendChild(modalHeader);
+                modal.appendChild(modalBody);
+                modal.appendChild(modalFooter);
+                modalBg.appendChild(modal);
+                
+                // 添加到文档
+                document.body.appendChild(modalBg);
+            }
+            
+            // 添加动画和交互样式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
+                @keyframes rotate {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+                
+                .rotate-animation {
+                    animation: rotate 1s linear infinite;
+                    display: inline-block;
+                }
+                
+                .stat-card {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                }
+                
+                .chart-container {
+                    position: relative;
+                    cursor: crosshair;
+                }
+                
+                .alert-item {
+                    transition: background-color 0.2s;
+                }
+                
+                .alert-item:hover {
+                    background-color: rgba(255,255,255,0.05) !important;
+                }
+                
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+                    .dashboard-container, .dashboard-container * {
+                        visibility: visible;
+                    }
+                    .dashboard-container {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        background-color: white !important;
+                        color: black !important;
+                    }
+                    .dashboard-footer, .chart-tooltip {
+                        display: none;
+                    }
+                    .stat-card, .dashboard-panel {
+                        break-inside: avoid;
+                        background-color: #f3f3f3 !important;
+                        color: black !important;
+                    }
+                    .stat-title, .panel-title, .alert-time {
+                        color: #333 !important;
+                    }
+                    .stat-value, .alert-content {
+                        color: black !important;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // 初始化图表
+            // 土壤墒情监测图表
+            let soilMoistureChart;
+            let soilMoistureChartData;
+            
+            // 创建图表数据
+            function initCharts() {
+                // 设置系统时间显示
+                function updateTime() {
+                    const now = new Date();
+                    const dateEl = document.getElementById('dashboard-date');
+                    const timeEl = document.getElementById('dashboard-time');
+                    
+                    if (dateEl) {
+                        const year = now.getFullYear();
+                        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                        const day = now.getDate().toString().padStart(2, '0');
+                        dateEl.textContent = `${year}年${month}月${day}日`;
+                    }
+                    
+                    if (timeEl) {
+                        const hours = now.getHours().toString().padStart(2, '0');
+                        const minutes = now.getMinutes().toString().padStart(2, '0');
+                        const seconds = now.getSeconds().toString().padStart(2, '0');
+                        timeEl.textContent = `${hours}:${minutes}:${seconds}`;
+                    }
+                    
+                    setTimeout(updateTime, 1000);
+                }
+                
+                updateTime();
+                
+                // 刷新按钮添加动画效果
+                const refreshBtn = document.querySelector('.dashboard-refresh i');
+                if (refreshBtn) {
+                    refreshBtn.addEventListener('click', function() {
+                        this.classList.add('rotate-animation');
+                        setTimeout(() => {
+                            this.classList.remove('rotate-animation');
+                            showToast('数据已更新');
+                        }, 1000);
+                    });
+                }
+                
+                // 土壤墒情监测图表
+                const soilMoistureCanvas = document.getElementById('soil-moisture-chart');
+                if (soilMoistureCanvas) {
+                    // 准备数据
+                    soilMoistureChartData = {
+                        labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                        datasets: [{
+                            label: '实际土壤湿度 (%)',
+                            data: [32, 36, 31, 33, 27, 34, 36],
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#4caf50',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: '最适宜湿度范围',
+                            // 两条直线表示适宜湿度范围
+                            data: [35, 35, 35, 35, 35, 35, 35],
+                            borderColor: 'rgba(255, 152, 0, 0.5)',
+                            borderWidth: 1,
+                            borderDash: [5, 3],
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            fill: false
+                        },
+                        {
+                            // 下限
+                            data: [30, 30, 30, 30, 30, 30, 30],
+                            borderColor: 'rgba(255, 152, 0, 0.5)',
+                            borderWidth: 1,
+                            borderDash: [5, 3],
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            fill: '+1', // 在两条线之间填充
+                            backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                            label: ''  // 隐藏标签
+                        }]
+                    };
+                    
+                    // 图表配置
+                    const soilMoistureConfig = {
+                        type: 'line',
+                        data: soilMoistureChartData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    labels: {
+                                        color: '#8b92a9',
+                                        font: {
+                                            size: 12
+                                        },
+                                        filter: function(legendItem, chartData) {
+                                            // 只显示第一个和第二个数据集的图例
+                                            return legendItem.datasetIndex < 2;
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false,
+                                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                                    borderWidth: 1,
+                                    callbacks: {
+                                        label: function(context) {
+                                            // 只为第一个数据集显示完整标签
+                                            if (context.datasetIndex === 0) {
+                                                let label = context.dataset.label || '';
+                                                if (label) {
+                                                    label += ': ';
+                                                }
+                                                if (context.parsed.y !== null) {
+                                                    label += context.parsed.y + '%';
+                                                }
+                                                return label;
+                                            } else if (context.datasetIndex === 1) {
+                                                return '适宜湿度范围: 30-35%';
+                                            } else {
+                                                return null; // 不显示第三个数据集
+                                            }
+                                        },
+                                        footer: function(tooltipItems) {
+                                            const currentValue = tooltipItems[0].parsed.y;
+                                            if (currentValue < 30) {
+                                                return '土壤过干，建议灌溉';
+                                            } else if (currentValue > 35) {
+                                                return '土壤过湿，注意排水';
+                                            } else {
+                                                return '土壤湿度适宜';
+                                            }
+                                        }
+                                    }
+                                },
+                                annotation: {
+                                    annotations: {
+                                        warning: {
+                                            type: 'line',
+                                            borderColor: 'rgba(255, 82, 82, 0.7)',
+                                            borderWidth: 1,
+                                            borderDash: [6, 3],
+                                            label: {
+                                                enabled: true,
+                                                content: '干旱警戒线',
+                                                position: 'end',
+                                                backgroundColor: 'rgba(255, 82, 82, 0.7)',
+                                                font: {
+                                                    size: 10
+                                                }
+                                            },
+                                            scaleID: 'y',
+                                            value: 25
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        color: '#8b92a9'
+                                    },
+                                    grid: {
+                                        display: false
+                                    }
+                                },
+                                y: {
+                                    min: 20,
+                                    max: 50,
+                                    ticks: {
+                                        color: '#8b92a9',
+                                        callback: function(value) {
+                                            return value + '%';
+                                        }
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.05)'
+                                    }
+                                }
+                            },
+                            interaction: {
+                                mode: 'nearest',
+                                axis: 'x',
+                                intersect: false
+                            }
+                        }
+                    };
+                    
+                    // 创建图表
+                    soilMoistureChart = new Chart(soilMoistureCanvas, soilMoistureConfig);
+                }
+                
+                // 作物生长指数分析图表
+                const cropGrowthCanvas = document.getElementById('crop-growth-chart');
+                if (cropGrowthCanvas) {
+                    // 准备数据
+                    cropGrowthChartData = {
+                        labels: ['第1周', '第2周', '第3周', '第4周', '第5周', '第6周'],
+                        datasets: [{
+                            label: '本季生长指数',
+                            data: [78, 82, 85, 89, 92, 95],
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#4caf50',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: '去年同期',
+                            data: [75, 78, 80, 83, 86, 88],
+                            borderColor: '#2196f3',
+                            backgroundColor: 'rgba(33, 150, 243, 0)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            fill: false,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#2196f3',
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }]
+                    };
+                    
+                    // 图表配置
+                    const cropGrowthConfig = {
+                        type: 'line',
+                        data: cropGrowthChartData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    labels: {
+                                        color: '#8b92a9',
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false,
+                                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                                    borderWidth: 1,
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed.y !== null) {
+                                                label += context.parsed.y;
+                                            }
+                                            return label;
+                                        },
+                                        footer: function(tooltipItems) {
+                                            if (tooltipItems.length > 1) {
+                                                const currentYear = tooltipItems[0].parsed.y;
+                                                const lastYear = tooltipItems[1].parsed.y;
+                                                const diff = currentYear - lastYear;
+                                                const percentage = ((diff / lastYear) * 100).toFixed(1);
+                                                return `同比增长: ${diff > 0 ? '+' : ''}${percentage}%`;
+                                            }
+                                            return '';
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        color: '#8b92a9'
+                                    },
+                                    grid: {
+                                        display: false
+                                    }
+                                },
+                                y: {
+                                    min: 70,
+                                    max: 100,
+                                    ticks: {
+                                        color: '#8b92a9'
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.05)'
+                                    }
+                                }
+                            },
+                            interaction: {
+                                mode: 'nearest',
+                                axis: 'x',
+                                intersect: false
+                            }
+                        }
+                    };
+                    
+                    // 创建图表
+                    cropGrowthChart = new Chart(cropGrowthCanvas, cropGrowthConfig);
+                }
+                
+                // 监测点分布饼图
+                const distributionCanvas = document.getElementById('distribution-chart');
+                if (distributionCanvas) {
+                    // 准备数据
+                    distributionChartData = {
+                        labels: ['农田区域', '温室大棚', '果园区域', '水稻田', '蔬菜基地'],
+                        datasets: [{
+                            data: [35, 25, 15, 15, 10],
+                            backgroundColor: [
+                                'rgba(76, 175, 80, 0.8)',
+                                'rgba(33, 150, 243, 0.8)',
+                                'rgba(255, 193, 7, 0.8)',
+                                'rgba(156, 39, 176, 0.8)',
+                                'rgba(233, 30, 99, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(76, 175, 80, 1)',
+                                'rgba(33, 150, 243, 1)',
+                                'rgba(255, 193, 7, 1)',
+                                'rgba(156, 39, 176, 1)',
+                                'rgba(233, 30, 99, 1)'
+                            ],
+                            borderWidth: 1,
+                            hoverOffset: 10
+                        }]
+                    };
+                    
+                    // 图表配置
+                    const distributionConfig = {
+                        type: 'pie',
+                        data: distributionChartData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'right',
+                                    labels: {
+                                        color: '#8b92a9',
+                                        font: {
+                                            size: 12
+                                        },
+                                        padding: 15,
+                                        usePointStyle: true,
+                                        pointStyle: 'circle'
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                                    borderWidth: 1,
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed !== null) {
+                                                label += context.parsed + '%';
+                                            }
+                                            return label;
+                                        },
+                                        afterLabel: function(context) {
+                                            const pointsMap = {
+                                                '农田区域': 42,
+                                                '温室大棚': 30,
+                                                '果园区域': 18,
+                                                '水稻田': 18,
+                                                '蔬菜基地': 12
+                                            };
+                                            return `监测点数量: ${pointsMap[context.label]}个`;
+                                        }
+                                    }
+                                }
+                            },
+                            layout: {
+                                padding: 10
+                            },
+                            elements: {
+                                arc: {
+                                    borderWidth: 1
+                                }
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            }
+                        }
+                    };
+                    
+                    // 创建图表
+                    distributionChart = new Chart(distributionCanvas, distributionConfig);
+                }
+                
+                // 实时数据区域更新函数
+                function updateRealTimeData() {
+                    const now = new Date();
+                    const timeString = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes());
+                    
+                    // 更新温度值 (随机波动)
+                    const tempElement = document.getElementById('temperature-value');
+                    if (tempElement) {
+                        const currentTemp = parseFloat(tempElement.textContent);
+                        const newTemp = (currentTemp + (Math.random() * 0.6 - 0.3)).toFixed(1);
+                        tempElement.textContent = newTemp;
+                        
+                        // 更新时间戳
+                        const tempTimeElement = document.getElementById('temp-time');
+                        if (tempTimeElement) {
+                            tempTimeElement.textContent = timeString;
+                        }
+                    }
+                    
+                    // 更新湿度值 (随机波动)
+                    const humidityElement = document.getElementById('humidity-value');
+                    if (humidityElement) {
+                        const currentHumidity = parseFloat(humidityElement.textContent);
+                        const newHumidity = Math.min(Math.max((currentHumidity + (Math.random() * 2 - 1)).toFixed(1), 35), 75);
+                        humidityElement.textContent = newHumidity;
+                        
+                        // 更新时间戳
+                        const humidityTimeElement = document.getElementById('humidity-time');
+                        if (humidityTimeElement) {
+                            humidityTimeElement.textContent = timeString;
+                        }
+                    }
+                    
+                    // 更新光照值 (根据时间有规律变化)
+                    const lightElement = document.getElementById('light-value');
+                    if (lightElement) {
+                        const hour = now.getHours();
+                        // 白天增加光照，夜晚减少
+                        let baseLight = hour >= 6 && hour <= 18 ? 68000 : 5000;
+                        // 中午时分最强
+                        if (hour >= 10 && hour <= 14) {
+                            baseLight = 82000;
+                        }
+                        const newLight = Math.round(baseLight + (Math.random() * 8000 - 4000));
+                        lightElement.textContent = newLight;
+                        
+                        // 更新时间戳
+                        const lightTimeElement = document.getElementById('light-time');
+                        if (lightTimeElement) {
+                            lightTimeElement.textContent = timeString;
+                        }
+                    }
+                    
+                    // 更新土壤墒情图表 (添加新数据点)
+                    if (typeof soilMoistureChart !== 'undefined') {
+                        // 随机生成新的湿度值
+                        const lastValue = soilMoistureChartData.datasets[0].data[soilMoistureChartData.datasets[0].data.length - 1];
+                        const newValue = Math.min(Math.max((lastValue + (Math.random() * 4 - 2)), 25), 45);
+                        
+                        // 移除第一个数据点并添加新数据点
+                        soilMoistureChartData.datasets[0].data.shift();
+                        soilMoistureChartData.datasets[0].data.push(newValue.toFixed(1));
+                        
+                        // 更新图表
+                        soilMoistureChart.update();
+                    }
+                    
+                    // 30秒后再次更新
+                    setTimeout(updateRealTimeData, 30000);
+                }
+                
+                // 初次调用更新函数
+                updateRealTimeData();
+            }
+            
+            // 调用图表初始化
+            initCharts();
+        });
+    </script>
+
+    <!-- 添加平滑滚动效果的JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取所有带有scroll-btn类的链接
+        const scrollLinks = document.querySelectorAll('.scroll-btn');
+        
+        // 为每个链接添加点击事件
+        scrollLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 获取目标部分的ID
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    // 平滑滚动到目标位置
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+    </script>
+
+    <!-- 添加闪光效果动画 -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setInterval(function() {
+            const btnShine = document.getElementById('btn-shine');
+            if(btnShine) {
+                btnShine.style.transform = 'rotate(25deg) translateX(-150%)';
+                setTimeout(function() {
+                    btnShine.style.transform = 'rotate(25deg) translateX(150%)';
+                }, 10);
+            }
+        }, 4000);
+    });
+    </script>
+</body>
+</html> 

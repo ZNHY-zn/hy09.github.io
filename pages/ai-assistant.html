@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AI农业助手 - 智农慧眼</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/modules.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        /* 页面头部样式 */
+        .page-header {
+            background: url('../images/s009.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            padding: 80px 0;
+            margin-bottom: 0;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6), rgba(0,0,0,0.3));
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        
+        .page-header .container {
+            position: relative;
+            z-index: 2;
+            padding: 30px 0 15px 0;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(0,0,0,0.7), 0 0 30px rgba(0,0,0,0.5);
+            animation: fadeInUp 1.2s ease-out, glowText 3s infinite alternate;
+        }
+        
+        .page-header .title-decoration {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #3498db, #2980b9);
+            margin: 0 auto 1rem;
+            animation: scaleIn 1.5s ease-out, pulse 3s infinite alternate;
+        }
+        
+        /* 按钮样式统一 */
+        .btn {
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            border: none;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-outline-primary {
+            border-color: #3498db;
+            color: #3498db;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-light {
+            background: #ffffff;
+            border: none;
+            color: #212529;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .btn-light:hover {
+            background: #f8f9fa;
+        }
+        
+        /* 卡片统一样式 */
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        /* 聊天容器统一样式 */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 15px;
+            position: relative;
+            clear: both;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .message-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .message-content {
+            padding: 12px 18px;
+            border-radius: 15px;
+        }
+        
+        .message-user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .message-user .message-avatar {
+            margin-right: 0;
+            margin-left: 10px;
+        }
+        
+        .message-user .message-content {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border-bottom-right-radius: 0;
+        }
+        
+        .message-ai .message-content {
+            background-color: #e9ecef;
+            color: #212529;
+            border-bottom-left-radius: 0;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            margin-right: 10px;
+            outline: none;
+        }
+        
+        .send-button {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .send-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.5);
+        }
+        
+        .typing-indicator {
+            align-self: flex-start;
+            background-color: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #666;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+        
+        /* 为新增功能添加样式 */
+        .settings-panel {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .quick-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .quick-question {
+            background-color: rgba(52, 152, 219, 0.1);
+            border: 1px solid #3498db;
+            color: #3498db;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-question:hover {
+            background-color: #3498db;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        /* 统一图标尺寸 */
+        .card .bi, .feature-section .bi {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .bi {
+            transform: scale(1.1);
+        }
+
+        /* 统一卡片标题样式 */
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #2c3e50;
+        }
+
+        /* 统一卡片内容样式 */
+        .card-text {
+            color: #6c757d;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* 统一联系区域表单样式 */
+        .contact-section .form-control {
+            border-radius: 30px;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            background-color: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .contact-section .form-control::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .contact-section .form-select {
+            border-radius: 30px;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            background-color: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        /* 统一其他元素尺寸 */
+        .section {
+            padding: 4rem 0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        .mb-5 {
+            margin-bottom: 3rem !important;
+        }
+
+        /* 调整联系我们按钮 */
+        .contact-section .btn-light {
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .contact-section .btn-light:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* 统一清空聊天按钮样式 */
+        #clearChat {
+            border-radius: 30px;
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <!-- 导航内容将由JavaScript动态生成 -->
+    </nav>
+
+    <!-- 页面横幅 - 合并封面 -->
+    <header class="page-header" style="margin-bottom: 0; position: relative; overflow: hidden; height: auto; padding-top: 60px; padding-bottom: 60px;">
+        <!-- 动态背景 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('../images/s009.png'); background-size: cover; background-position: center; filter: brightness(0.85) contrast(1.2); animation: zoomEffect 20s infinite alternate;">
+        </div>
+        <!-- 半透明叠加层 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6), rgba(0,0,0,0.3)); animation: fadeIn 1.5s ease-in-out;"></div>
+        
+        <div class="container" style="position: relative; z-index: 2; padding: 50px 0 30px 0;">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 style="font-size: 3rem; font-weight: 800; color: white; margin-bottom: 0.8rem; text-shadow: 0 0 20px rgba(0,0,0,0.7), 0 0 30px rgba(0,0,0,0.5); animation: fadeInUp 1.2s ease-out, glowText 3s infinite alternate;">
+                        AI农业管家
+                    </h1>
+                    <div style="width: 120px; height: 4px; background: linear-gradient(to right, #3498db, #2980b9); margin: 0 auto 1.5rem; animation: scaleIn 1.5s ease-out, pulse 3s infinite alternate;"></div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="content-card" style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); animation: fadeIn 1.8s ease-in-out; transform-style: preserve-3d; transition: all 0.3s ease;">
+                        <h2 class="text-white text-center mb-3" style="font-size: 1.8rem; font-weight: 600; text-shadow: 0 0 15px rgba(0,0,0,0.8); animation: slideInLeft 1.5s ease-out;">
+                            基于DeepSeek-V3大模型API的智能咨询系统
+                        </h2>
+                        
+                        <p class="lead text-center mb-4" style="font-size: 1.1rem; line-height: 1.5; color: rgba(255,255,255,0.95); text-shadow: 0 0 10px rgba(0,0,0,0.8); animation: slideInRight 1.5s ease-out;">
+                            接入官方DeepSeek-V3 API，结合农业专业知识库，为您提供精准的农业技术咨询、作物管理建议、病虫害诊断等智能服务。
+                        </p>
+                        
+                        <div class="row justify-content-center mb-3 text-center">
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 0.8s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#3498db';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-chat-dots" style="font-size: 2rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 10px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 1rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">智能问答</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#3498db';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-clipboard-data" style="font-size: 2rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 10px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 1rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">数据分析</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1.2s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#3498db';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-bug" style="font-size: 2rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 10px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 1rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">病虫诊断</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1.4s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#3498db';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-calendar-check" style="font-size: 2rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 10px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 1rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">智能排程</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="success-story" style="animation: fadeIn 2s ease-in-out; background: rgba(52, 152, 219, 0.25); border-left: 4px solid #3498db; padding: 1rem; text-align: left; border-radius: 0 10px 10px 0; font-size: 1rem; margin-top: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;" onmouseover="this.style.transform='translateX(5px)'; this.style.background='rgba(52, 152, 219, 0.35)';" onmouseout="this.style.transform='translateX(0)'; this.style.background='rgba(52, 152, 219, 0.25)';">
+                            <i class="bi bi-check-circle-fill" style="color: #3498db; margin-right: 8px; text-shadow: 0 0 5px rgba(0,0,0,0.3);"></i>
+                            <span style="color: white; text-shadow: 0 0 8px rgba(0,0,0,0.6);">智能问答系统已成功回答农业咨询1.2万次，准确率达93.6%，平均响应时间仅1.5秒。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 添加查看更多按钮 -->
+            <div class="row">
+                <div class="col-12 text-center mt-4">
+                    <a href="#chat-section" class="btn btn-primary px-5 py-3 scroll-btn" style="border-radius: 50px; font-weight: 600; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.5); border: none; position: relative; overflow: hidden; transition: all 0.3s ease; font-size: 1.1rem;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(52, 152, 219, 0.7)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(52, 152, 219, 0.5)';">
+                        <span style="position: relative; z-index: 2;">
+                            <i class="bi bi-chevron-double-down me-2"></i>开始体验
+                        </span>
+                        <span style="position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; background: linear-gradient(45deg, #3498db, #2980b9); opacity: 0.7; transform: rotate(25deg) translateX(-150%); transition: all 0.6s ease;" id="btn-shine"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 添加关键动画 -->
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes zoomEffect {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes glowText {
+            0% { text-shadow: 0 0 10px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5); }
+            100% { text-shadow: 0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 40px rgba(52, 152, 219, 0.3); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(25deg) translateX(-150%); }
+            100% { transform: rotate(25deg) translateX(150%); }
+        }
+
+        .scroll-btn:hover #btn-shine {
+            animation: shine 1.5s infinite;
+        }
+    </style>
+    
+    <script>
+    // 添加平滑滚动效果的JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取所有带有scroll-btn类的链接
+        const scrollLinks = document.querySelectorAll('.scroll-btn');
+        
+        // 为每个链接添加点击事件
+        scrollLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 获取目标部分的ID
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    // 平滑滚动到目标位置
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+    </script>
+
+    <!-- 设置面板 -->
+    <div class="container mt-4" id="chat-section">
+        <div class="settings-panel">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">DeepSeek-V3 智能农业助手</h5>
+                        <button id="clearChat" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-trash"></i> 清空聊天
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 聊天界面 -->
+    <div class="container my-4">
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <!-- 欢迎消息 -->
+                <div class="message message-ai">
+                    <div class="message-avatar">
+                        <img src="../images/管家.png" alt="AI管家">
+                    </div>
+                    <div class="message-content">
+                    您好，我是智农慧眼 AI 管家！我可以为您提供农业技术咨询、病虫害诊断、种植决策等服务。请问有什么可以帮您?
+                    </div>
+                </div>
+                <!-- 打字指示器 -->
+                <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <!-- 输入框 -->
+            <form id="chatForm" class="chat-input">
+                <input type="text" id="userInput" placeholder="请输入您的问题，例如：如何防治玉米螟虫?" autocomplete="off">
+                <button type="submit" class="send-button"><i class="bi bi-send-fill"></i></button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 快捷问题 -->
+    <div class="container mb-5">
+        <div class="quick-questions">
+            <button class="quick-question" data-question="如何防治玉米螟虫?">玉米螟虫防治</button>
+            <button class="quick-question" data-question="水稻缺什么元素叶子发黄?">水稻叶黄原因</button>
+            <button class="quick-question" data-question="苹果树什么时候施肥最好?">苹果树施肥时间</button>
+            <button class="quick-question" data-question="如何提高小麦产量?">小麦增产技术</button>
+            <button class="quick-question" data-question="大棚西红柿叶子卷曲怎么办?">番茄叶卷问题</button>
+        </div>
+    </div>
+
+    <!-- AI功能介绍 -->
+    <section class="section feature-section">
+        <div class="container">
+            <h2 class="text-center mb-5">AI助手功能</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-bug fs-1 text-success mb-3"></i>
+                            <h3 class="card-title">病虫害诊断</h3>
+                            <p class="card-text">基于DeepSeek-V3模型对作物病虫害进行快速识别和防治方案推荐，提供精准农药使用指导。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-calendar-check fs-1 text-success mb-3"></i>
+                            <h3 class="card-title">种植管理</h3>
+                            <p class="card-text">提供全周期农作物种植计划，包括播种、施肥、浇水、收获的最佳时机，帮助农民科学管理。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-graph-up-arrow fs-1 text-success mb-3"></i>
+                            <h3 class="card-title">产量优化</h3>
+                            <p class="card-text">基于农业大数据和AI分析，为农户提供增产建议，帮助优化种植方式，提高作物产量和品质。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ <!-- 联系我们 -->
+ <section class="contact-section bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2>想了解更多或试用我们的监测系统？</h2>
+                <p>填写表单，我们的技术专家将为您提供详细解答和演示</p>
+            </div>
+            <div class="col-lg-6">
+                <form class="contact-form">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="您的姓名" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="tel" class="form-control" placeholder="联系电话" required>
+                        </div>
+                        <div class="col-12">
+                            <input type="email" class="form-control" placeholder="电子邮箱" required>
+                        </div>
+                        <div class="col-12">
+                            <select class="form-select">
+                                <option selected>您的种植规模</option>
+                                <option>50亩以下</option>
+                                <option>50-200亩</option>
+                                <option>200-1000亩</option>
+                                <option>1000亩以上</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <textarea class="form-control" rows="3" placeholder="您想了解的内容或遇到的问题"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-light px-4 py-2">
+                                <i class="bi bi-send me-2"></i>提交咨询
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 页脚 -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="footer-info">
+                
+                    <p>智农慧眼致力于通过AI技术重构传统农业生产流程，帮助农户提高产量、降低成本，推动农业现代化发展。</p>
+                    <div class="social-links">
+                        <a href="#"><i class="bi bi-wechat"></i></a>
+                        <a href="#"><i class="bi bi-tencent-qq"></i></a>
+                        <a href="#"><i class="bi bi-sina-weibo"></i></a>
+                        <a href="#"><i class="bi bi-envelope-fill"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <h4>快速链接</h4>
+                <ul class="footer-links">
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="monitoring.html">农情监测</a></li>
+                    <li><a href="decision.html">种植决策</a></li>
+                    <li><a href="tracing.html">质量追溯</a></li>
+                    <li><a href="knowledge.html">知识服务</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2">
+                <h4>支持中心</h4>
+                <ul class="footer-links">
+                    <li><a href="help.html">帮助中心</a></li>
+                    <li><a href="faq.html">常见问题</a></li>
+                    <li><a href="download.html">APP下载</a></li>
+                    <li><a href="training.html">培训教程</a></li>
+                    <li><a href="feedback.html">问题反馈</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h4>联系我们</h4>
+                <div class="contact-info">
+                    <p><i class="bi bi-geo-alt-fill"></i> 辽宁省大连市沙河口区大连海洋大学</p>
+                    <p><i class="bi bi-telephone-fill"></i> 13033229487</p>
+                    <p><i class="bi bi-envelope-fill"></i> 13470118418@163.com</p>
+                    <p><i class="bi bi-clock-fill"></i> 工作时间: 周一至周五 9:00-18:00</p>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 智农慧眼 - AI驱动下的精准种植与智能农业管理平台 | 辽ICP备20254321号</p>
+        </div>
+    </div>
+</footer>
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/api-proxy.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatForm = document.getElementById('chatForm');
+            const userInput = document.getElementById('userInput');
+            const chatMessages = document.getElementById('chatMessages');
+            const typingIndicator = document.getElementById('typingIndicator');
+            
+            // 聊天历史
+            let chatHistory = [
+                { role: "system", content: "你是智农慧眼的AI智能管家，基于DeepSeek-V3大模型设计，专门为中国农民提供服务。你精通各种农作物种植技术、病虫害防治方法、农业气象分析、农业政策等知识。\n\n请严格按照以下要求回答用户问题：\n\n1. 语言要求：\n- 使用完整规范的中文句子，禁止使用中英文混合表达\n- 使用通俗易懂的语言，避免专业术语，或在使用时进行解释\n- 每个句子都必须有明确的主语、谓语和宾语，禁止使用不完整的句子片段\n\n2. 内容结构：\n- 回答必须条理分明，有清晰的逻辑结构\n- 务必使用数字编号（1. 2. 3.）组织多步骤或多方法的内容\n- 每个要点用一到两句话完整表达，不要出现简短的词组或单词\n\n3. 内容质量：\n- 内容必须准确科学，符合现代农业技术规范\n- 提供的建议必须具有可操作性和实用性\n- 回答应简明扼要，重点突出，避免冗长\n\n4. 禁止事项：\n- 绝对禁止使用任何标记语言或格式符号（包括但不限于#、*、`、$等）\n- 禁止输出断句、不完整的表达或缺少主谓宾的句子\n- 禁止在回答中包含「症状-」「原因-」等破折号简写表达\n\n5. 输出格式：\n- 对于相关的农作物问题，应始终包含「原因分析」和「解决方法」两个部分\n- 在描述多个步骤时，确保每个步骤都有完整的说明\n- 在列举症状时，必须同时提供对应的处理方法\n\n回答态度要友好、耐心，使用贴近农民生活的语言，避免生硬、机械的表达。\n\n对于特定问题的固定回答：\n1. 当用户询问你是谁/你是什么/你叫什么名字等身份问题时，必须回答：\"我是您的专属农业AI管家，是基于深度探索公司DeepSeek打造的V3智慧大模型，能够为您量身定做AI服务体系。我可以为您提供农业技术咨询、病虫害诊断、种植决策等服务。\"\n2. 当用户问你能做什么时，回答：\"我能为您提供以下服务：1.农作物种植技术咨询 2.病虫害识别与防治方案 3.气象分析与种植建议 4.农业政策解读 5.农产品信息与市场行情 6.简单的数据分析和计算。请告诉我您需要什么帮助？\"\n3. 当用户询问你的数据来源时，回答：\"我的知识来源于大量农业科研文献、技术手册、国家农业政策文件以及农业专家的经验总结，涵盖了各类作物的种植技术、病虫害防治和农业管理知识。\"\n\n请严格遵循这些预设回答，不要修改或重新组织这些固定回答的内容。" }
+            ];
+            
+            // 提交表单事件
+            chatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const userMessage = userInput.value.trim();
+                if (!userMessage) return;
+                
+                // 添加用户消息到聊天界面
+                appendMessage(userMessage, 'user');
+                userInput.value = '';
+                
+                // 添加到聊天历史
+                chatHistory.push({ role: "user", content: userMessage });
+                
+                // 显示打字指示器
+                typingIndicator.style.display = 'flex';
+                
+                // 创建AI消息的容器
+                const aiMessageElement = document.createElement('div');
+                aiMessageElement.classList.add('message', 'message-ai');
+                
+                // 添加头像
+                const avatarDiv = document.createElement('div');
+                avatarDiv.classList.add('message-avatar');
+                const avatarImg = document.createElement('img');
+                avatarImg.src = '../images/管家.png';
+                avatarImg.alt = 'AI管家';
+                avatarDiv.appendChild(avatarImg);
+                aiMessageElement.appendChild(avatarDiv);
+                
+                // 添加消息内容容器
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('message-content');
+                aiMessageElement.appendChild(contentDiv);
+                
+                chatMessages.insertBefore(aiMessageElement, typingIndicator);
+                
+                // 清空请求按钮状态
+                let fullResponse = '';
+                let responseStarted = false;
+                
+                // 使用流式API调用
+                apiProxyService.callDeepSeekAPI(
+                    chatHistory,
+                    'deepseek-chat',
+                    0,
+                    // 处理每个响应块
+                    (chunk) => {
+                        if (chunk.delta && chunk.delta.content) {
+                            // 如果是第一个响应块，设置标志
+                            if (!responseStarted) {
+                                responseStarted = true;
+                                typingIndicator.style.display = 'none';
+                            }
+                            
+                            // 添加内容到消息
+                            fullResponse += chunk.delta.content;
+                            contentDiv.innerHTML = formatMessage(fullResponse);
+                            
+                            // 滚动到底部
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                    },
+                    // 处理错误
+                    (error) => {
+                        console.log('API错误，切换到本地响应模式:', error);
+                        // 不显示任何错误消息，保持打字指示器
+                        // typingIndicator.style.display = 'none';
+                    },
+                    // 完成时的回调
+                    () => {
+                        // 隐藏打字指示器
+                        typingIndicator.style.display = 'none';
+                        
+                        // 将完整回复添加到历史记录
+                        chatHistory.push({ role: "assistant", content: fullResponse });
+                        
+                        // 如果来自本地服务，添加标记
+                        if (!apiProxyService.baseUrl) {
+                            contentDiv.innerHTML += '<div class="text-muted mt-2" style="font-size: 0.8rem;">(由本地服务提供)</div>';
+                        }
+                        
+                        // 滚动到底部
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                );
+            });
+            
+            function appendMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(sender === 'user' ? 'message-user' : 'message-ai');
+                
+                // 添加头像
+                const avatarDiv = document.createElement('div');
+                avatarDiv.classList.add('message-avatar');
+                const avatarImg = document.createElement('img');
+                avatarImg.src = sender === 'user' ? '../images/用户.png' : '../images/管家.png';
+                avatarImg.alt = sender === 'user' ? '用户' : 'AI管家';
+                avatarDiv.appendChild(avatarImg);
+                messageDiv.appendChild(avatarDiv);
+                
+                // 添加消息内容
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('message-content');
+                contentDiv.innerHTML = formatMessage(message);
+                messageDiv.appendChild(contentDiv);
+                
+                // 插入到打字指示器前面
+                chatMessages.insertBefore(messageDiv, typingIndicator);
+                
+                // 滚动到底部
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                return messageDiv;
+            }
+            
+            function formatMessage(message) {
+                // 处理消息中的换行符和链接
+                return message
+                    .replace(/\n/g, '<br>')
+                    .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+            }
+            
+            // 添加快捷问题点击功能
+            document.querySelectorAll('.quick-question').forEach(button => {
+                button.addEventListener('click', function() {
+                    userInput.value = this.getAttribute('data-question');
+                    chatForm.dispatchEvent(new Event('submit'));
+                });
+            });
+            
+            // 清空聊天记录
+            document.getElementById('clearChat').addEventListener('click', function() {
+                // 中止当前请求
+                apiProxyService.cancelRequest();
+                
+                // 保留系统提示
+                chatHistory = [chatHistory[0]];
+                
+                // 清空聊天界面，但保留打字指示器
+                while (chatMessages.firstChild) {
+                    if (chatMessages.firstChild === typingIndicator) {
+                        break;
+                    }
+                    chatMessages.removeChild(chatMessages.firstChild);
+                }
+                appendMessage('聊天已清空，您可以开始新的对话。', 'ai');
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能决策支持 - 智农慧眼</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/modules.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- 下载Word文档库 - 提前加载到头部 -->
+    <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+    <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <!-- 备用链接 -->
+    <script>
+        // 如果主要CDN加载失败，尝试备用链接
+        if (typeof docx === 'undefined') {
+            const docxScript = document.createElement('script');
+            docxScript.src = "https://cdn.jsdelivr.net/npm/docx@7.8.2/build/index.js";
+            document.head.appendChild(docxScript);
+            
+            const fileScript = document.createElement('script');
+            fileScript.src = "https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js";
+            document.head.appendChild(fileScript);
+        }
+    </script>
+    <style>
+        /* 决策系统页面特定样式 */
+        .page-header {
+            background: url('../images/z001.png') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            padding: 12rem 0 8rem !important;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 1;
+        }
+        
+        .overview-section {
+            background: url('../images/z001.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            padding: 5rem 0;
+            color: white;
+            margin-top: 0;
+        }
+        
+        .overview-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 1;
+        }
+        
+        .section-header {
+            border: 3px solid #3498db;
+            border-radius: 15px;
+            padding: 20px;
+            background-color: rgba(52, 152, 219, 0.05);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3498db, #1abc9c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .card-icon {
+            transform: scale(1.1);
+        }
+        
+        .card-icon i {
+            font-size: 28px;
+            color: white;
+        }
+        
+        .data-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <!-- 导航内容将由JavaScript动态生成 -->
+    </nav>
+
+    <!-- 页面横幅 - 合并封面 -->
+    <header class="page-header" style="margin-bottom: 0; position: relative; overflow: hidden; height: auto; padding-top: 30px; padding-bottom: 20px;">
+        <!-- 动态背景 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('../images/z001.png'); background-size: cover; background-position: center; filter: brightness(0.85) contrast(1.2); animation: zoomEffect 20s infinite alternate;">
+        </div>
+        <!-- 半透明叠加层 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6), rgba(0,0,0,0.3)); animation: fadeIn 1.5s ease-in-out;"></div>
+        
+        <div class="container" style="position: relative; z-index: 2; padding: 30px 0 15px 0;">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 style="font-size: 2.5rem; font-weight: 800; color: white; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(0,0,0,0.7), 0 0 30px rgba(0,0,0,0.5); animation: fadeInUp 1.2s ease-out, glowText 3s infinite alternate;">
+                        精准种植决策
+                    </h1>
+                    <div style="width: 100px; height: 3px; background: linear-gradient(to right, #3498db, #2980b9); margin: 0 auto 1rem; animation: scaleIn 1.5s ease-out, pulse 3s infinite alternate;"></div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="content-card" style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); border-radius: 15px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); animation: fadeIn 1.8s ease-in-out; transform-style: preserve-3d; transition: all 0.3s ease;">
+                        <h2 class="text-white text-center mb-2" style="font-size: 1.5rem; font-weight: 600; text-shadow: 0 0 15px rgba(0,0,0,0.8); animation: slideInLeft 1.5s ease-out;">
+                            智能决策辅助系统
+                        </h2>
+                        
+                        <p class="lead text-center mb-3" style="font-size: 0.95rem; line-height: 1.4; color: rgba(255,255,255,0.95); text-shadow: 0 0 10px rgba(0,0,0,0.8); animation: slideInRight 1.5s ease-out;">
+                            融合作物生长机理与机器学习算法，基于多源数据融合，为农户提供科学种植建议和精准农业实践支持，覆盖从播种到收获的全生产周期。
+                        </p>
+                        
+                        <div class="row justify-content-center mb-2 text-center">
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 0.8s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#3498db';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-flower3" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">品种选择优化</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#3498db';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-droplet-fill" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">精准施肥指导</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1.2s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#3498db';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-bar-chart-line" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">产量预测分析</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="feature-icon-wrap" style="animation: fadeInUp 1.4s ease-out; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.transform='translateY(-8px)'; this.querySelector('i').style.transform='scale(1.2)'; this.querySelector('i').style.color='#3498db';" 
+                                     onmouseout="this.style.transform='translateY(0)'; this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='rgba(255,255,255,0.95)';">
+                                    <i class="bi bi-calendar-check" style="font-size: 1.6rem; color: rgba(255,255,255,0.95); display: block; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s ease;"></i>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.95); text-shadow: 0 0 8px rgba(0,0,0,0.8);">农事规划系统</div>
+                    </div>
+                        </div>
+                        </div>
+                        
+                        <div class="success-story" style="animation: fadeIn 2s ease-in-out; background: rgba(52, 152, 219, 0.25); border-left: 4px solid #3498db; padding: 0.5rem; text-align: left; border-radius: 0 10px 10px 0; font-size: 0.85rem; margin-top: 5px; box-shadow: 0 3px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;" onmouseover="this.style.transform='translateX(5px)'; this.style.background='rgba(52, 152, 219, 0.35)';" onmouseout="this.style.transform='translateX(0)'; this.style.background='rgba(52, 152, 219, 0.25)';">
+                            <i class="bi bi-check-circle-fill" style="color: #3498db; margin-right: 5px; text-shadow: 0 0 5px rgba(0,0,0,0.3);"></i>
+                            <span style="color: white; text-shadow: 0 0 8px rgba(0,0,0,0.6);">在辽宁省阜新市彰武县，系统应用后实现了平均增产16.4%，农户收入提升22%，肥料用量减少30%。</span>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+            
+            <!-- 添加查看更多按钮 -->
+            <div class="row">
+                <div class="col-12 text-center mt-3">
+                    <a href="#decision-modules" class="btn btn-primary px-4 py-2 scroll-btn" style="border-radius: 50px; font-weight: 600; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.5); border: none; position: relative; overflow: hidden; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(52, 152, 219, 0.7)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(52, 152, 219, 0.5)';">
+                        <span style="position: relative; z-index: 2;">
+                            <i class="bi bi-chevron-double-down me-1"></i>查看更多
+                        </span>
+                        <span style="position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; background: linear-gradient(45deg, #3498db, #2980b9); opacity: 0.7; transform: rotate(25deg) translateX(-150%); transition: all 0.6s ease;" id="btn-shine"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 决策模块展示 -->
+    <section class="bg-light py-5" id="decision-modules">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>智能决策模块</h2>
+                <p>多维度决策支持，覆盖种植全周期各环节</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- 品种选择模块 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="module-card feature-card animated delay-1">
+                        <div class="card-icon">
+                            <i class="bi bi-flower3"></i>
+                        </div>
+                        <h3>品种选择优化</h3>
+                        <p>结合土壤养分、气候条件和市场需求，推荐最适合本地种植的农作物品种。</p>
+                        <ul class="feature-list">
+                            <li>适应性评估</li>
+                            <li>产量潜力计算</li>
+                            <li>经济效益分析</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary px-3 py-2" style="border-radius: 30px; font-weight: 500; transition: all 0.3s ease;">查看详情</a>
+                    </div>
+                </div>
+                
+                <!-- 施肥指导模块 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="module-card feature-card animated delay-2">
+                        <div class="card-icon">
+                            <i class="bi bi-droplet-fill"></i>
+                        </div>
+                        <h3>精准施肥指导</h3>
+                        <p>基于土壤检测结果和作物需肥规律，制定个性化施肥方案，减少肥料浪费。</p>
+                        <ul class="feature-list">
+                            <li>土壤养分分析</li>
+                            <li>缺素诊断</li>
+                            <li>可变率施肥建议</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary px-3 py-2" style="border-radius: 30px; font-weight: 500; transition: all 0.3s ease;">查看详情</a>
+                    </div>
+                </div>
+                
+                <!-- 病虫害防控模块 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="module-card feature-card animated delay-3">
+                        <div class="card-icon">
+                            <i class="bi bi-bug"></i>
+                        </div>
+                        <h3>病虫害预警防控</h3>
+                        <p>监测气象条件变化，结合发病规律和传播模型，提前预警可能爆发的病虫害。</p>
+                        <ul class="feature-list">
+                            <li>风险等级评估</li>
+                            <li>防治时机判断</li>
+                            <li>用药方案推荐</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary px-3 py-2" style="border-radius: 30px; font-weight: 500; transition: all 0.3s ease;">查看详情</a>
+                    </div>
+                </div>
+                
+                <!-- 灌溉管理模块 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="module-card feature-card animated delay-1">
+                        <div class="card-icon">
+                            <i class="bi bi-moisture"></i>
+                        </div>
+                        <h3>智能灌溉管理</h3>
+                        <p>根据土壤墒情、气象条件和作物需水特性，计算最佳灌溉时间和用水量。</p>
+                        <ul class="feature-list">
+                            <li>用水需求计算</li>
+                            <li>灌溉时机判断</li>
+                            <li>灌溉量优化</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary px-3 py-2" style="border-radius: 30px; font-weight: 500; transition: all 0.3s ease;">查看详情</a>
+                    </div>
+                </div>
+                
+                <!-- 收获预测模块 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="module-card feature-card animated delay-2">
+                        <div class="card-icon">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <h3>产量与收获预测</h3>
+                        <p>综合生长期监测数据，预测收获时间和产量，辅助农户做好收获准备和销售规划。</p>
+                        <ul class="feature-list">
+                            <li>生长期分析</li>
+                            <li>产量潜力评估</li>
+                            <li>最佳收获期推荐</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary px-3 py-2" style="border-radius: 30px; font-weight: 500; transition: all 0.3s ease;">查看详情</a>
+                    </div>
+                </div>
+                
+                <!-- 经济分析模块 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="module-card feature-card animated delay-3">
+                        <div class="card-icon">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h3>经济效益分析</h3>
+                        <p>核算生产投入与预期产出，结合市场行情，评估经济效益和投资回报率。</p>
+                        <ul class="feature-list">
+                            <li>成本核算</li>
+                            <li>利润预测</li>
+                            <li>风险分析</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary px-3 py-2" style="border-radius: 30px; font-weight: 500; transition: all 0.3s ease;">查看详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 实时决策支持演示 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>实时决策支持演示</h2>
+                <p>体验数据驱动的精准农业决策流程</p>
+            </div>
+            
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="module-card data-card mb-4">
+                        <div class="card-header p-4 d-flex align-items-center">
+                            <div class="card-icon me-3" style="background: white; color: #3498db;">
+                                <i class="bi bi-geo-alt"></i>
+                            </div>
+                            <h3 class="mb-0 text-white">区域分析</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group mb-4">
+                                <label class="form-label">选择区域</label>
+                                <select id="region-select" class="form-select">
+                                    <option>辽宁省鞍山市台安县</option>
+                                    <option>黑龙江省哈尔滨市宾县</option>
+                                    <option>吉林省长春市九台区</option>
+                                    <option>山东省潍坊市寿光市</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label class="form-label">种植作物</label>
+                                <select id="crop-select" class="form-select">
+                                    <option>玉米</option>
+                                    <option>水稻</option>
+                                    <option>大豆</option>
+                                    <option>小麦</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label class="form-label">种植面积（亩）</label>
+                                <input id="area-input" type="number" class="form-control" value="100">
+                            </div>
+                            <button id="generate-report-btn" class="btn btn-primary w-100 py-2" style="border-radius: 30px; font-weight: 600; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); border: none; transition: all 0.3s ease;">生成决策报告</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="module-card" style="background: rgba(255, 255, 255, 0.95);">
+                        <h3 class="mb-4">智能建议概览</h3>
+                        
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle me-2"></i> 根据当前气象条件和土壤墒情，建议5月10日前完成播种
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h5>品种推荐</h5>
+                            <div class="table-responsive">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>品种</th>
+                                            <th>适应性</th>
+                                            <th>产量预期</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>先玉335</td>
+                                            <td><span class="badge bg-primary">极高</span></td>
+                                            <td>650-700kg/亩</td>
+                                        </tr>
+                                        <tr>
+                                            <td>京科968</td>
+                                            <td><span class="badge bg-primary">较高</span></td>
+                                            <td>600-650kg/亩</td>
+                                        </tr>
+                                        <tr>
+                                            <td>郑单958</td>
+                                            <td><span class="badge bg-secondary">中等</span></td>
+                                            <td>550-600kg/亩</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h5>施肥方案</h5>
+                            <p>基于土壤养分检测结果，推荐以下施肥方案：</p>
+                            <div class="progress mb-3">
+                                <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="small text-muted">氮肥(N)：25kg/亩，分2次施用</p>
+                            
+                            <div class="progress mb-3">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="small text-muted">磷肥(P₂O₅)：12kg/亩，一次性底施</p>
+                            
+                            <div class="progress mb-3">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="small text-muted">钾肥(K₂O)：8kg/亩，一次性底施</p>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button id="preview-download-btn" class="btn btn-outline-primary py-2" style="border-radius: 30px; font-weight: 500; transition: all 0.3s ease;"><i class="bi bi-download me-2"></i>下载完整报告</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 应用案例 -->
+    <section class="py-5" id="case-studies" style="background: url('../images/z002.png'); background-size: cover; background-position: center;">
+        <div class="container">
+            <div class="section-header text-center" style="border-color: rgba(255, 255, 255, 0.7); background-color: rgba(0, 0, 0, 0.5);">
+                <h2 style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">应用案例</h2>
+                <p style="color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 2px rgba(0,0,0,0.5);">智能决策辅助系统在实际农业生产中的应用成果</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="module-card h-100 animated delay-1">
+                        <span class="badge bg-warning mb-3">玉米种植</span>
+                        <h3>辽宁鞍山示范区</h3>
+                        <p>在600亩示范区应用品种选择和精准施肥方案，与传统种植方式相比：</p>
+                        <ul class="feature-list">
+                            <li>平均亩产提升85公斤</li>
+                            <li>化肥用量减少22%</li>
+                            <li>农药使用减少18%</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="module-card h-100 animated delay-2">
+                        <span class="badge bg-warning mb-3">水稻种植</span>
+                        <h3>黑龙江哈尔滨基地</h3>
+                        <p>在1200亩水稻种植基地应用智能灌溉和病虫害预警系统，成果显著：</p>
+                        <ul class="feature-list">
+                            <li>灌溉水用量节省31%</li>
+                            <li>病虫害损失降低43%</li>
+                            <li>综合效益提升22.5%</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="module-card h-100 animated delay-3">
+                        <span class="badge bg-warning mb-3">大豆种植</span>
+                        <h3>吉林长春合作社</h3>
+                        <p>在吉林省长春市的农民合作社推广精准种植决策系统，应用面积3500亩：</p>
+                        <ul class="feature-list">
+                            <li>大豆产量提高15.8%</li>
+                            <li>生产成本降低8.5%</li>
+                            <li>农户收入增加3720元/户</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 联系我们 -->
+ <section class="contact-section bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                <h2>想了解更多或试用我们的监测系统？</h2>
+                    <p>填写表单，我们的技术专家将为您提供详细解答和演示</p>
+                </div>
+                <div class="col-lg-6">
+                    <form class="contact-form">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" placeholder="您的姓名" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="tel" class="form-control" placeholder="联系电话" required>
+                            </div>
+                            <div class="col-12">
+                                <input type="email" class="form-control" placeholder="电子邮箱" required>
+                            </div>
+                            <div class="col-12">
+                                <select class="form-select">
+                                <option selected>您的种植规模</option>
+                                <option>50亩以下</option>
+                                <option>50-200亩</option>
+                                <option>200-1000亩</option>
+                                <option>1000亩以上</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                            <textarea class="form-control" rows="3" placeholder="您想了解的内容或遇到的问题"></textarea>
+                            </div>
+                            <div class="col-12">
+                            <button type="submit" class="btn btn-light px-4 py-2" style="border-radius: 30px; font-weight: 500; transition: all 0.3s ease;">提交咨询</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="footer-info">
+                      
+                        <p>智农慧眼致力于通过AI技术重构传统农业生产流程，帮助农户提高产量、降低成本，推动农业现代化发展。</p>
+                        <div class="social-links">
+                            <a href="#"><i class="bi bi-wechat"></i></a>
+                            <a href="#"><i class="bi bi-tencent-qq"></i></a>
+                            <a href="#"><i class="bi bi-sina-weibo"></i></a>
+                            <a href="#"><i class="bi bi-envelope-fill"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">首页</a></li>
+                        <li><a href="monitoring.html">农情监测</a></li>
+                        <li><a href="decision.html">种植决策</a></li>
+                        <li><a href="tracing.html">质量追溯</a></li>
+                        <li><a href="knowledge.html">知识服务</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h4>支持中心</h4>
+                    <ul class="footer-links">
+                        <li><a href="help.html">帮助中心</a></li>
+                        <li><a href="faq.html">常见问题</a></li>
+                        <li><a href="download.html">APP下载</a></li>
+                        <li><a href="training.html">培训教程</a></li>
+                        <li><a href="feedback.html">问题反馈</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h4>联系我们</h4>
+                    <div class="contact-info">
+                        <p><i class="bi bi-geo-alt-fill"></i> 辽宁省大连市沙河口区大连海洋大学</p>
+                        <p><i class="bi bi-telephone-fill"></i> 13033229487</p>
+                        <p><i class="bi bi-envelope-fill"></i> 13470118418@163.com</p>
+                        <p><i class="bi bi-clock-fill"></i> 工作时间: 周一至周五 9:00-18:00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 智农慧眼 - AI驱动下的精准种植与智能农业管理平台 | 辽ICP备20254321号</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <a href="#" class="back-to-top">
+        <i class="bi bi-arrow-up"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/decision.js"></script>
+
+    <!-- EmailJS库 -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // 使用您的公共密钥初始化EmailJS
+        (function() {
+            emailjs.init("HEfV0J3Dsa4mJbsjr"); // 在Account页面的API Keys部分获取
+        })();
+        
+        // 预览区域下载按钮功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const previewDownloadBtn = document.getElementById('preview-download-btn');
+            if (previewDownloadBtn) {
+                previewDownloadBtn.addEventListener('click', function() {
+                    const regionSelect = document.getElementById('region-select');
+                    const cropSelect = document.getElementById('crop-select');
+                    const areaInput = document.getElementById('area-input');
+                    
+                    if (regionSelect && cropSelect && areaInput) {
+                        const region = regionSelect.value;
+                        const crop = cropSelect.value;
+                        const area = parseInt(areaInput.value);
+                        
+                        if (!region || !crop || isNaN(area) || area <= 0) {
+                            alert('请填写完整的表单信息');
+                            return;
+                        }
+                        
+                        // 激活报告生成按钮
+                        const reportBtn = document.getElementById('generate-report-btn');
+                        if (reportBtn) {
+                            reportBtn.click();
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+    <style>
+    @keyframes glowText {
+        0% { text-shadow: 0 0 10px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5); }
+        100% { text-shadow: 0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 40px rgba(52, 152, 219, 0.3); }
+    }
+
+    @keyframes shine {
+        0% { transform: rotate(25deg) translateX(-150%); }
+        100% { transform: rotate(25deg) translateX(150%); }
+    }
+
+    .scroll-btn:hover #btn-shine {
+        animation: shine 1.5s infinite;
+    }
+
+    .content-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    }
+
+    @keyframes zoomEffect {
+        from { transform: scale(1); }
+        to { transform: scale(1.1); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+        from { 
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    </style>
+
+    <script>
+    // 添加平滑滚动效果的JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取所有带有scroll-btn类的链接
+        const scrollLinks = document.querySelectorAll('.scroll-btn');
+        
+        // 为每个链接添加点击事件
+        scrollLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 获取目标部分的ID
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    // 平滑滚动到目标位置
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 添加闪光效果动画
+        setInterval(function() {
+            const btnShine = document.getElementById('btn-shine');
+            if(btnShine) {
+                btnShine.style.transform = 'rotate(25deg) translateX(-150%)';
+                setTimeout(function() {
+                    btnShine.style.transform = 'rotate(25deg) translateX(150%)';
+                }, 10);
+            }
+        }, 4000);
+    });
+    </script>
+
+    <!-- 添加全局按钮样式 -->
+    <style>
+    .btn {
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #3498db, #2980b9);
+        border: none;
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-outline-primary {
+        border-color: #3498db;
+        color: #3498db;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #3498db;
+        color: white;
+    }
+    </style>
+</body>
+</html> 
