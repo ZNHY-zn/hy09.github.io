@@ -18,13 +18,13 @@ document.addEventListener('DOMContentLoaded', function() {
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav w-100 justify-content-center">
-                    <li class="nav-item left-item"><a class="nav-link" href="pages/monitoring.html">农情监测</a></li>
-                    <li class="nav-item left-item"><a class="nav-link" href="pages/decision.html">种植决策</a></li>
-                    <li class="nav-item left-item"><a class="nav-link" href="pages/tracing.html">质量追溯</a></li>
+                    <li class="nav-item left-item"><a class="nav-link" href="monitoring.html">农情监测</a></li>
+                    <li class="nav-item left-item"><a class="nav-link" href="decision.html">种植决策</a></li>
+                    <li class="nav-item left-item"><a class="nav-link" href="tracing.html">质量追溯</a></li>
                     <li class="nav-item center-item"><a class="nav-link brand-center" href="index.html">—— 智农慧眼 ——</a></li>
-                    <li class="nav-item right-item"><a class="nav-link" href="pages/knowledge.html">知识服务</a></li>
-                    <li class="nav-item right-item"><a class="nav-link" href="pages/ai-assistant.html">AI管家</a></li>
-                    <li class="nav-item right-item"><a class="nav-link" href="pages/about.html">关于我们</a></li>
+                    <li class="nav-item right-item"><a class="nav-link" href="knowledge.html">知识服务</a></li>
+                    <li class="nav-item right-item"><a class="nav-link" href="ai-assistant.html">AI管家</a></li>
+                    <li class="nav-item right-item"><a class="nav-link" href="about.html">关于我们</a></li>
                 </ul>
             </div>
         </div>
@@ -41,13 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link active" href="index.html">首页</a></li>
-                    <li class="nav-item"><a class="nav-link" href="pages/monitoring.html">农情监测</a></li>
-                    <li class="nav-item"><a class="nav-link" href="pages/decision.html">种植决策</a></li>
-                    <li class="nav-item"><a class="nav-link" href="pages/tracing.html">质量追溯</a></li>
-                    <li class="nav-item"><a class="nav-link" href="pages/knowledge.html">知识服务</a></li>
-                    <li class="nav-item"><a class="nav-link" href="pages/ai-assistant.html">AI管家</a></li>
-                    <li class="nav-item"><a class="nav-link" href="pages/about.html">关于我们</a></li>
-                    <li class="nav-item"><a class="nav-link btn btn-primary btn-sm login-btn" href="pages/login.html">登录/注册</a></li>
+                    <li class="nav-item"><a class="nav-link" href="monitoring.html">农情监测</a></li>
+                    <li class="nav-item"><a class="nav-link" href="decision.html">种植决策</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tracing.html">质量追溯</a></li>
+                    <li class="nav-item"><a class="nav-link" href="knowledge.html">知识服务</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ai-assistant.html">AI管家</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">关于我们</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-primary btn-sm login-btn" href="login.html">登录/注册</a></li>
                 </ul>
             </div>
         </div>
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 子页面导航栏需要调整路径
     const subPageFixedNavHtml = `
         <div class="container">
-            <a class="navbar-brand" href="../index.html">
+            <a class="navbar-brand" href="index.html">
              "智农慧眼"———— AI技术赋能的农业智能化管理系统
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="../index.html">首页</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">首页</a></li>
                     <li class="nav-item"><a class="nav-link" href="monitoring.html">农情监测</a></li>
                     <li class="nav-item"><a class="nav-link" href="decision.html">种植决策</a></li>
                     <li class="nav-item"><a class="nav-link" href="tracing.html">质量追溯</a></li>
