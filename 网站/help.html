@@ -1,0 +1,718 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帮助中心 - 智农慧眼</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/modules.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        /* 帮助中心页面特定样式 */
+        .page-header {
+            background: url('images/n001.png') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            padding: 12rem 0 8rem !important;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 1;
+        }
+        
+        .help-section {
+            padding: 5rem 0;
+        }
+        
+        .help-card {
+            background-color: white;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            height: 100%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .help-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        
+        .help-card-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .help-card:hover .help-card-icon {
+            transform: scale(1.1);
+        }
+        
+        .help-card-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .help-card-body {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .help-card-title {
+            color: #212529;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .help-card-text {
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .search-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .search-input {
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+        }
+        
+        .search-btn {
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(to right, #28a745, #20c997);
+            border: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            background: linear-gradient(to right, #218838, #1e9a7f);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(32, 201, 151, 0.3);
+        }
+        
+        .faq-section {
+            background-color: #f8f9fa;
+            padding: 5rem 0;
+        }
+        
+        .faq-item {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .faq-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .faq-header {
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0;
+        }
+        
+        .faq-content {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-content p {
+            margin: 1.25rem 0;
+            color: #6c757d;
+        }
+        
+        .faq-item.active .faq-header {
+            border-bottom-color: #e9ecef;
+        }
+        
+        .faq-item.active .faq-content {
+            max-height: 1000px;
+        }
+        
+        .contact-section {
+            padding: 5rem 0;
+        }
+        
+        .contact-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: 2rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        
+        .contact-icon i {
+            font-size: 1.75rem;
+            color: white;
+        }
+        
+        .contact-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #212529;
+        }
+        
+        .contact-text {
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes glowText {
+            0% { text-shadow: 0 0 10px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5); }
+            100% { text-shadow: 0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 40px rgba(32, 201, 151, 0.3); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes zoomEffect {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <!-- 导航内容将由JavaScript动态生成 -->
+    </nav>
+
+    <!-- 页面横幅 - 合并封面 -->
+    <header class="page-header" style="margin-bottom: 0; position: relative; overflow: hidden; height: auto; padding-top: 30px; padding-bottom: 20px;">
+        <!-- 动态背景 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('images/n001.png'); background-size: cover; background-position: center; filter: brightness(0.85) contrast(1.2); animation: zoomEffect 20s infinite alternate;">
+        </div>
+        <!-- 半透明叠加层 -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6), rgba(0,0,0,0.3)); animation: fadeIn 1.5s ease-in-out;"></div>
+        
+        <div class="container" style="position: relative; z-index: 2; padding: 30px 0 15px 0;">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 style="font-size: 2.5rem; font-weight: 800; color: white; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(0,0,0,0.7), 0 0 30px rgba(0,0,0,0.5); animation: fadeInUp 1.2s ease-out, glowText 3s infinite alternate;">
+                        帮助中心
+                    </h1>
+                    <div style="width: 100px; height: 3px; background: linear-gradient(to right, #28a745, #20c997); margin: 0 auto 1rem; animation: scaleIn 1.5s ease-out, pulse 3s infinite alternate;"></div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="search-container" style="animation: fadeInUp 1.5s ease-out;">
+                        <h2 class="text-center mb-4" style="font-size: 1.5rem; color: #212529;">您需要什么帮助？</h2>
+                        <form class="d-flex">
+                            <input type="text" class="form-control search-input me-2" placeholder="输入关键词搜索帮助内容..." aria-label="搜索">
+                            <button class="btn search-btn" type="submit">搜索</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 支持资源 -->
+    <section class="help-section">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 style="color: #28a745; font-weight: 700;">支持资源</h2>
+                <p style="color: #6c757d; max-width: 700px; margin: 0 auto;">我们为您提供全方位的支持资源，帮助您充分利用智农慧眼平台的各项功能。</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-card">
+                        <div class="help-card-body">
+                            <div class="help-card-icon">
+                                <i class="bi bi-question-circle"></i>
+                            </div>
+                            <h3 class="help-card-title">常见问题</h3>
+                            <p class="help-card-text">查看用户最常咨询的问题解答，快速找到您需要的帮助信息。</p>
+                            <a href="faq.html" class="btn btn-outline-success">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-card">
+                        <div class="help-card-body">
+                            <div class="help-card-icon">
+                                <i class="bi bi-phone"></i>
+                            </div>
+                            <h3 class="help-card-title">APP下载</h3>
+                            <p class="help-card-text">下载智农慧眼移动应用，随时随地管理您的农业生产。</p>
+                            <a href="download.html" class="btn btn-outline-success">立即下载</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-card">
+                        <div class="help-card-body">
+                            <div class="help-card-icon">
+                                <i class="bi bi-book"></i>
+                            </div>
+                            <h3 class="help-card-title">使用教程</h3>
+                            <p class="help-card-text">通过我们的详细教程，学习如何使用平台各项功能。</p>
+                            <a href="training.html" class="btn btn-outline-success">浏览教程</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-card">
+                        <div class="help-card-body">
+                            <div class="help-card-icon">
+                                <i class="bi bi-chat-dots"></i>
+                            </div>
+                            <h3 class="help-card-title">在线客服</h3>
+                            <p class="help-card-text">工作时间内随时咨询我们的客服团队，获取即时帮助。</p>
+                            <a href="#" class="btn btn-outline-success">联系客服</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-card">
+                        <div class="help-card-body">
+                            <div class="help-card-icon">
+                                <i class="bi bi-tools"></i>
+                            </div>
+                            <h3 class="help-card-title">故障修复</h3>
+                            <p class="help-card-text">遇到技术问题？查看我们的故障排除指南或提交工单。</p>
+                            <a href="#" class="btn btn-outline-success">故障排除</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-card">
+                        <div class="help-card-body">
+                            <div class="help-card-icon">
+                                <i class="bi bi-chat-quote"></i>
+                            </div>
+                            <h3 class="help-card-title">问题反馈</h3>
+                            <p class="help-card-text">提交您的使用体验和建议，帮助我们不断改进产品。</p>
+                            <a href="feedback.html" class="btn btn-outline-success">提交反馈</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 热门问题 -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 style="color: #28a745; font-weight: 700;">热门问题</h2>
+                <p style="color: #6c757d; max-width: 700px; margin: 0 auto;">以下是用户最常咨询的问题，点击展开查看详细解答。</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="faq-list">
+                        <div class="faq-item active">
+                            <div class="faq-header" onclick="toggleFaq(this)">
+                                <h3>如何注册智农慧眼账号？</h3>
+                                <i class="bi bi-chevron-down"></i>
+                            </div>
+                            <div class="faq-content" style="max-height: 1000px;">
+                                <p>注册智农慧眼账号非常简单，您可以按照以下步骤操作：</p>
+                                <ol>
+                                    <li>在智农慧眼网站或APP首页点击右上角的"注册/登录"按钮</li>
+                                    <li>选择"新用户注册"选项</li>
+                                    <li>输入您的手机号码，并获取验证码</li>
+                                    <li>设置账号密码（建议使用字母、数字和符号的组合，增强安全性）</li>
+                                    <li>填写必要的个人信息</li>
+                                    <li>阅读并同意用户协议和隐私政策</li>
+                                    <li>点击"完成注册"按钮</li>
+                                </ol>
+                                <p>注册成功后，您将自动登录系统，并可以开始使用智农慧眼的各项功能。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-header" onclick="toggleFaq(this)">
+                                <h3>智农慧眼支持哪些作物的监测和分析？</h3>
+                                <i class="bi bi-chevron-down"></i>
+                            </div>
+                            <div class="faq-content">
+                                <p>智农慧眼目前支持以下主要作物类别的监测和分析：</p>
+                                <ul>
+                                    <li><strong>粮食作物</strong>：水稻、小麦、玉米、大豆等</li>
+                                    <li><strong>经济作物</strong>：棉花、油菜、花生、甘蔗等</li>
+                                    <li><strong>果蔬作物</strong>：苹果、梨、葡萄、番茄、黄瓜等</li>
+                                    <li><strong>特色作物</strong>：人参、枸杞、茶叶等</li>
+                                </ul>
+                                <p>我们的系统会定期更新支持的作物种类。如果您种植的作物目前不在支持列表中，请联系客服，我们会根据需求优先添加相关支持。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-header" onclick="toggleFaq(this)">
+                                <h3>如何将我的监测设备连接到平台？</h3>
+                                <i class="bi bi-chevron-down"></i>
+                            </div>
+                            <div class="faq-content">
+                                <p>将监测设备连接到智农慧眼平台需要以下步骤：</p>
+                                <ol>
+                                    <li>登录您的智农慧眼账号</li>
+                                    <li>进入"设备管理"页面</li>
+                                    <li>点击"添加新设备"按钮</li>
+                                    <li>根据设备类型选择对应的连接方式：
+                                        <ul>
+                                            <li>扫描设备上的二维码</li>
+                                            <li>手动输入设备ID</li>
+                                            <li>通过蓝牙连接（仅支持部分设备）</li>
+                                        </ul>
+                                    </li>
+                                    <li>按照屏幕提示完成设备配网和授权</li>
+                                    <li>为设备命名并分配到指定农田</li>
+                                </ol>
+                                <p>设备连接成功后，系统将开始接收并处理设备上传的数据。您可以在设备管理页面查看设备状态和数据概览。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-header" onclick="toggleFaq(this)">
+                                <h3>智农慧眼的数据安全保障措施有哪些？</h3>
+                                <i class="bi bi-chevron-down"></i>
+                            </div>
+                            <div class="faq-content">
+                                <p>我们高度重视用户数据安全，采取了多层次的保障措施：</p>
+                                <ul>
+                                    <li><strong>数据传输加密</strong>：所有数据传输均采用TLS 1.3协议加密</li>
+                                    <li><strong>数据存储加密</strong>：敏感数据存储时采用AES-256加密算法</li>
+                                    <li><strong>身份验证</strong>：采用多因素认证技术，防止未授权访问</li>
+                                    <li><strong>权限管理</strong>：严格的用户权限分级管控系统</li>
+                                    <li><strong>数据备份</strong>：定期自动备份，确保数据不丢失</li>
+                                    <li><strong>安全审计</strong>：定期进行安全漏洞扫描和修复</li>
+                                    <li><strong>合规管理</strong>：严格遵守国家相关法律法规，保护用户隐私</li>
+                                </ul>
+                                <p>如果您对数据安全有任何疑问，请参阅我们的《隐私政策》或联系客服。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-header" onclick="toggleFaq(this)">
+                                <h3>如何解读农情监测数据？</h3>
+                                <i class="bi bi-chevron-down"></i>
+                            </div>
+                            <div class="faq-content">
+                                <p>智农慧眼平台的农情监测数据解读可以从以下几个方面进行：</p>
+                                <ol>
+                                    <li><strong>数据概览</strong>：登录后进入农田管理页面，您可以查看农田健康指数、生长阶段、天气预警等关键信息</li>
+                                    <li><strong>作物长势</strong>：查看NDVI、LAI等植被指数的变化趋势，了解作物长势情况</li>
+                                    <li><strong>土壤状况</strong>：关注土壤湿度、温度、养分含量等指标，确保适宜的生长环境</li>
+                                    <li><strong>预警信息</strong>：注意系统推送的病虫害、干旱、霜冻等预警，及时采取应对措施</li>
+                                    <li><strong>历史对比</strong>：与历史同期数据对比，评估当前生长状况</li>
+                                </ol>
+                                <p>系统对异常数据会自动标注并提供解释，您也可以点击任意数据旁的"?"图标获取该指标的详细解释和建议操作。</p>
+                                <p>我们还提供专业的农艺师在线咨询服务，帮助您深入解读监测数据并提供专业建议。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="faq.html" class="btn btn-success">查看更多常见问题 <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 style="color: #28a745; font-weight: 700;">联系我们</h2>
+                <p style="color: #6c757d; max-width: 700px; margin: 0 auto;">如果您在上述资源中没有找到所需帮助，请通过以下方式联系我们的客服团队。</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+                        <h3 class="contact-title">客服热线</h3>
+                        <p class="contact-text">工作日 9:00-18:00</p>
+                        <a href="tel13033229487" class="btn btn-outline-success">13033229487</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <h3 class="contact-title">电子邮件</h3>
+                        <p class="contact-text">24小时内回复</p>
+                        <a href="13470118418@163.com" class="btn btn-outline-success">13470118418@163.comm</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="bi bi-wechat"></i>
+                        </div>
+                        <h3 class="contact-title">微信客服</h3>
+                        <p class="contact-text">扫描二维码联系</p>
+                        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#wechatModal">查看二维码</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    // ... existing code ...
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dijs/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    
+    <!-- 微信客服弹窗 -->
+    <div class="modal fade" id="wechatModal" tabindex="-1" aria-labelledby="wechatModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wechatModalLabel">微信客服</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="../images/图.jpg" alt="微信客服二维码" class="img-fluid mb-3" style="max-width: 200px;">
+                    <p>扫描上方二维码，添加智农慧眼客服微信</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加浮动客服按钮 -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1030;">
+        <button class="btn btn-primary btn-lg rounded-circle shadow" data-bs-toggle="modal" data-bs-target="#wechatModal" style="width: 60px; height: 60px;">
+            <i class="bi bi-chat-dots-fill"></i>
+        </button>
+    </div>
+    
+    <script>
+        // 在页面加载完成后，为所有在线客服按钮添加点击事件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有在线客服按钮
+            const chatBtns = document.querySelectorAll('a.btn-outline-primary');
+            
+            // 给每个按钮添加点击事件
+            chatBtns.forEach(btn => {
+                if(btn.textContent.trim() === '开始聊天') {
+                    btn.setAttribute('data-bs-toggle', 'modal');
+                    btn.setAttribute('data-bs-target', '#wechatModal');
+                    btn.setAttribute('href', 'javascript:void(0)');
+                }
+            });
+        });
+    </script>
+</body>
+// ... existing code ...
+    <!-- 微信二维码弹窗 -->
+    <div class="modal fade" id="wechatModal" tabindex="-1" aria-labelledby="wechatModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wechatModalLabel">微信客服</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="images/wechat-qr.png" alt="微信客服二维码" class="img-fluid mb-3" style="max-width: 200px;">
+                    <p>扫描上方二维码，添加智农慧眼客服微信</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="footer-info">
+                     
+                        <p>智农慧眼致力于通过AI技术重构传统农业生产流程，帮助农户提高产量、降低成本，推动农业现代化发展。</p>
+                        <div class="social-links">
+                            <a href="#"><i class="bi bi-wechat"></i></a>
+                            <a href="#"><i class="bi bi-tencent-qq"></i></a>
+                            <a href="#"><i class="bi bi-sina-weibo"></i></a>
+                            <a href="#"><i class="bi bi-envelope-fill"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">首页</a></li>
+                        <li><a href="monitoring.html">农情监测</a></li>
+                        <li><a href="decision.html">种植决策</a></li>
+                        <li><a href="tracing.html">质量追溯</a></li>
+                        <li><a href="knowledge.html">知识服务</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h4>支持中心</h4>
+                    <ul class="footer-links">
+                        <li><a href="help.html">帮助中心</a></li>
+                        <li><a href="faq.html">常见问题</a></li>
+                        <li><a href="download.html">APP下载</a></li>
+                        <li><a href="training.html">培训教程</a></li>
+                        <li><a href="feedback.html">问题反馈</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h4>联系我们</h4>
+                    <div class="contact-info">
+                        <p><i class="bi bi-geo-alt-fill"></i> 辽宁省大连市沙河口区大连海洋大学</p>
+                        <p><i class="bi bi-telephone-fill"></i> 13033229487</p>
+                        <p><i class="bi bi-envelope-fill"></i> 13470118418@163.com</p>
+                        <p><i class="bi bi-clock-fill"></i> 工作时间: 周一至周五 9:00-18:00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 智农慧眼 - AI驱动下的精准种植与智能农业管理平台 | 辽ICP备20254321号</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <a href="#" class="back-to-top">
+        <i class="bi bi-arrow-up"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dijs/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // FAQ切换功能
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // 关闭所有已打开的FAQ项
+            document.querySelectorAll('.faq-item.active').forEach(item => {
+                if (item !== faqItem) {
+                    item.classList.remove('active');
+                    item.querySelector('.faq-content').style.maxHeight = '0';
+                }
+            });
+            
+            // 切换当前项的状态
+            if (isActive) {
+                faqItem.classList.remove('active');
+                faqItem.querySelector('.faq-content').style.maxHeight = '0';
+            } else {
+                faqItem.classList.add('active');
+                const content = faqItem.querySelector('.faq-content');
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
+        }
+        
+        // 页面加载时确保第一个FAQ项处于展开状态
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstFaq = document.querySelector('.faq-item');
+            if (firstFaq) {
+                firstFaq.classList.add('active');
+                const content = firstFaq.querySelector('.faq-content');
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
+        });
+    </script>
+</body>
+</html> 
